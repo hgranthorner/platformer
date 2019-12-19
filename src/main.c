@@ -3,13 +3,14 @@
 
 #include "consts.h"
 #include "rect.h"
+#include "player.h"
 
 int main(void)
 {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) goto init_err;
 
   printf("Initialized SDL.\n");
-  SDL_Window* win = SDL_CreateWindow("Title",
+  SDL_Window* win = SDL_CreateWindow("Platformer",
                                      SDL_WINDOWPOS_CENTERED,
                                      SDL_WINDOWPOS_CENTERED,
                                      WIDTH,
@@ -19,18 +20,44 @@ int main(void)
   if (!win) goto window_err;
   printf("Rendered window.\n");
 
-  SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  SDL_Renderer *renderer = SDL_CreateRenderer(win, -1,
+                                              SDL_RENDERER_ACCELERATED
+                                              | SDL_RENDERER_PRESENTVSYNC);
   if (!renderer) goto renderer_err;
 
-  struct Rect floor = create_rect(0, 50, WIDTH, 50, 0, 255, 0, 255);
+  struct Rect floor = create_rect(0, HEIGHT - 50,
+                                  WIDTH, 50,
+                                  0, 255, 0, 255);
   struct Rect rects[] = { floor };
-  struct Rects rect_container = { rects, 1 };
+  struct Rects rect_container = { .rects = rects,
+                                  .size = 1 };
+
+  struct Controls controls = { .right = SDL_SCANCODE_RIGHT,
+                               .left = SDL_SCANCODE_LEFT,
+                               .jump = SDL_SCANCODE_SPACE };
+  struct Player player = { .rect = create_rect(10, HEIGHT - 100,
+                                       PLAYER_SIZE, PLAYER_SIZE,
+                                       100, 100, 100, 255),
+                           .controls = controls,
+                           .x_velocity = 0,
+                           .y_velocity = 0 };
   
   int running = 1;
   const int render_timer = roundf(1000.0f / (float) FPS);
   
   while (running)
   {
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+    if (state[controls.left])
+    {
+      player.rect.shape.x -= 3;
+    }
+    if (state[controls.right])
+    {
+      player.rect.shape.x += 3;
+    }
+
     SDL_Event event;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
@@ -39,16 +66,27 @@ int main(void)
 
     if (SDL_PollEvent(&event))
     {
+      if (event.type == SDL_KEYDOWN)
+      {
+        if (event.key.keysym.scancode == controls.jump)
+        {
+          player.y_velocity -= 10;
+        }
+      }
       if (event.type == SDL_QUIT)
       {
         running = 0;
       }
     }
 
-    SDL_Rect rect = { 400, 400, 100, 100 };
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        
-    SDL_RenderFillRect(renderer, &rect);
+    for (int i = 0; i < rect_container.size; ++i)
+    {
+      render_fill_rect(renderer, &rect_container.rects[i]);
+    }
+
+    move_player_position(&player);
+    apply_gravity(&player, &rect_container);
+    render_fill_rect(renderer, &player.rect);
 
     const int end_frame_time = SDL_GetTicks();
     SDL_Delay(max(10, render_timer - (end_frame_time - start_frame_time)));
