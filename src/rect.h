@@ -28,3 +28,4 @@ void render_fill_rect (SDL_Renderer *renderer, const struct Rect *rect);
 void render_line_rect (SDL_Renderer *renderer, const struct Rect *rect);
 
 #endif
+

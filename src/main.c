@@ -37,7 +37,7 @@ int main(void)
                                .jump = SDL_SCANCODE_SPACE };
   struct Player player = { .rect = create_rect(10, HEIGHT - 100,
                                        PLAYER_SIZE, PLAYER_SIZE,
-                                       100, 100, 100, 255),
+                                       0, 255, 255, 255),
                            .controls = controls,
                            .x_velocity = 0,
                            .y_velocity = 0 };
@@ -51,11 +51,11 @@ int main(void)
 
     if (state[controls.left])
     {
-      player.rect.shape.x -= 3;
+      player.rect.shape.x -= 5;
     }
     if (state[controls.right])
     {
-      player.rect.shape.x += 3;
+      player.rect.shape.x += 5;
     }
 
     SDL_Event event;

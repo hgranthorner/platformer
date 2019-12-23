@@ -1,0 +1,36 @@
+#+TITLE: Notes for Platformer
+
+* Models
+** [[file:src/player.h][Controls]]
+- struct holding a set of keyboard bindings
+** [[file:src/player.h][Player]]
+- struct holding a "player" object
+- Consists of a Rect, Controls, and current x and y velocity
+** [[file:src/rect.h][Color]]
+- struct containing 4 rgba ints
+** [[file:src/rect.h][Rect]]
+- struct containing an SDL_Rect and a color
+** [[file:src/rect.h][Rects]]
+- a container for multiple "Rect" structs
+- consists of a pointer to a list of "Rect" structs and its size in ints
+* Flow
+1. Initialize SDL stuff
+2. (While testing) initialize objects and player
+3. Begin running the game
+   1. Check to see if left or right keys are held
+   2. Clear the screen
+   3. Pop event off the queue and process
+   4. Render platforms
+   5. Move player
+   6. Render player
+   7. Handle FPS control
+   8. Render frame
+4. Handle errors
+5. Close program
+* Tasks
+** IN PROGRESS Add camera
+- How to handle this?
+- [[http://lazyfoo.net/tutorials/SDL/30_scrolling/index.php][Lazy Foo scrolling tutorial]]
+** TODO Add double check restraint
+** TODO Add death and respawn mechanics
+** TODO Handle level transitions
