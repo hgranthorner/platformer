@@ -23,7 +23,9 @@ void apply_gravity(Player *player, const Rects *rects)
     }
     else
     {
-      player->y_velocity += 1;
+      player->y_velocity += player->y_velocity > TERMINAL_VELOCITY
+        ? 0
+        : 1;
     }
   }
 }

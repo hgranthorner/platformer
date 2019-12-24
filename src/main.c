@@ -75,7 +75,7 @@ int main(void)
       {
         if (event.key.keysym.scancode == controls.jump)
         {
-          player.y_velocity -= 30;
+          player.y_velocity -= JUMP_VELOCITY;
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_R)
         {

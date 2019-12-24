@@ -5,6 +5,8 @@
 #define HEIGHT 800
 #define FPS 60
 #define PLAYER_SIZE 30
+#define TERMINAL_VELOCITY 30
+#define JUMP_VELOCITY 30
 
 static inline
 int max(int x, int y)
