@@ -38,14 +38,15 @@ int main(void)
                                   .size = 2 };
 
   Controls controls = { .right = SDL_SCANCODE_RIGHT,
-                               .left = SDL_SCANCODE_LEFT,
-                               .jump = SDL_SCANCODE_SPACE };
+                        .left = SDL_SCANCODE_LEFT,
+                        .jump = SDL_SCANCODE_SPACE };
   Player player = { .rect = create_rect(10, HEIGHT - 100,
-                                       PLAYER_SIZE, PLAYER_SIZE,
-                                       0, 255, 255, 255),
-                           .controls = controls,
-                           .x_velocity = 0,
-                           .y_velocity = 0 };
+                                        PLAYER_SIZE, PLAYER_SIZE,
+                                        0, 255, 255, 255),
+                    .controls = controls,
+                    .x_velocity = 0,
+                    .y_velocity = 0,
+                    .jumps_remaining = 2};
   
   int running = 1;
   const int render_timer = roundf(1000.0f / (float) FPS);
@@ -75,7 +76,11 @@ int main(void)
       {
         if (event.key.keysym.scancode == controls.jump)
         {
-          player.y_velocity -= JUMP_VELOCITY;
+          if (player.jumps_remaining > 0)
+          {
+            player.jumps_remaining -= 1;
+            player.y_velocity = -JUMP_VELOCITY;
+          }
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_R)
         {

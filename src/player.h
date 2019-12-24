@@ -16,6 +16,7 @@ typedef struct
   Controls controls;
   int x_velocity;
   int y_velocity;
+  int jumps_remaining;
 } Player;
 
 static inline

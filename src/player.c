@@ -20,6 +20,7 @@ void apply_gravity(Player *player, const Rects *rects)
     {
       player->rect.shape.y = r.y - player->rect.shape.h;
       player->y_velocity = 0;
+      player->jumps_remaining = 2;
     }
     else
     {

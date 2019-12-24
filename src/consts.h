@@ -5,7 +5,7 @@
 #define HEIGHT 800
 #define FPS 60
 #define PLAYER_SIZE 30
-#define TERMINAL_VELOCITY 30
+#define TERMINAL_VELOCITY 20
 #define JUMP_VELOCITY 30
 
 static inline
