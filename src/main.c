@@ -4,6 +4,7 @@
 #include "consts.h"
 #include "rect.h"
 #include "player.h"
+#include "camera.h"
 
 int main(void)
 {
@@ -92,6 +93,7 @@ int main(void)
     }
 
     move_player_position(&player);
+    move_camera(&player, &camera);
     apply_gravity(&player, &rect_container);
     render_fill_rect(renderer, &camera, &player.rect);
 

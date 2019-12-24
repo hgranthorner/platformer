@@ -17,8 +17,12 @@ void render_fill_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rec
   {
     Color c = rect->color;
 
+    const SDL_Rect r = { .x = rect->shape.x - camera->x,
+                         .y = rect->shape.y - camera->y,
+                         .w = rect->shape.w,
+                         .h = rect->shape.h };
     SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
-    SDL_RenderFillRect(renderer, &rect->shape);
+    SDL_RenderFillRect(renderer, &r);
   }
 }
 
@@ -28,7 +32,11 @@ void render_line_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rec
   {
     Color c = rect->color;
 
+    const SDL_Rect r = { .x = rect->shape.x - camera->x,
+                         .y = rect->shape.y - camera->y,
+                         .w = rect->shape.w,
+                         .h = rect->shape.h };
     SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
-    SDL_RenderDrawRect(renderer, &rect->shape);
+    SDL_RenderDrawRect(renderer, &r);
   }
 }
