@@ -31,9 +31,11 @@ int main(void)
   Rect floor = create_rect(0, HEIGHT - 50,
                                   WIDTH, 50,
                                   0, 255, 0, 255);
-  Rect rects[] = { floor };
+
+  Rect platform = create_rect(500, 300, 300, 50, 0, 255, 0, 255);
+  Rect rects[] = { floor, platform };
   Rects rect_container = { .rects = rects,
-                                  .size = 1 };
+                                  .size = 2 };
 
   Controls controls = { .right = SDL_SCANCODE_RIGHT,
                                .left = SDL_SCANCODE_LEFT,
@@ -73,7 +75,7 @@ int main(void)
       {
         if (event.key.keysym.scancode == controls.jump)
         {
-          player.y_velocity -= 10;
+          player.y_velocity -= 30;
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_R)
         {
