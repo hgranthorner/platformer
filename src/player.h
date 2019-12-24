@@ -3,28 +3,28 @@
 
 #include "rect.h"
 
-struct Controls
+typedef struct
 {
   SDL_Scancode right;
   SDL_Scancode left;
   SDL_Scancode jump;
-};
+} Controls;
 
-struct Player
+typedef struct
 {
-  struct Rect rect;
-  struct Controls controls;
+  Rect rect;
+  Controls controls;
   int x_velocity;
   int y_velocity;
-};
+} Player;
 
 static inline
-void move_player_position(struct Player *player)
+void move_player_position(Player *player)
 {
   player->rect.shape.x += player->x_velocity;
   player->rect.shape.y += player->y_velocity;
 }
 
-void apply_gravity(struct Player *player, const struct Rects *rects);
+void apply_gravity(Player *player, const Rects *rects);
 
 #endif

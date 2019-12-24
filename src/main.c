@@ -25,17 +25,19 @@ int main(void)
                                               | SDL_RENDERER_PRESENTVSYNC);
   if (!renderer) goto renderer_err;
 
-  struct Rect floor = create_rect(0, HEIGHT - 50,
+  SDL_Rect camera = { 0, 0, WIDTH, HEIGHT };
+
+  Rect floor = create_rect(0, HEIGHT - 50,
                                   WIDTH, 50,
                                   0, 255, 0, 255);
-  struct Rect rects[] = { floor };
-  struct Rects rect_container = { .rects = rects,
+  Rect rects[] = { floor };
+  Rects rect_container = { .rects = rects,
                                   .size = 1 };
 
-  struct Controls controls = { .right = SDL_SCANCODE_RIGHT,
+  Controls controls = { .right = SDL_SCANCODE_RIGHT,
                                .left = SDL_SCANCODE_LEFT,
                                .jump = SDL_SCANCODE_SPACE };
-  struct Player player = { .rect = create_rect(10, HEIGHT - 100,
+  Player player = { .rect = create_rect(10, HEIGHT - 100,
                                        PLAYER_SIZE, PLAYER_SIZE,
                                        0, 255, 255, 255),
                            .controls = controls,
@@ -72,6 +74,11 @@ int main(void)
         {
           player.y_velocity -= 10;
         }
+        if (event.key.keysym.scancode == SDL_SCANCODE_R)
+        {
+          player.rect.shape.x = camera.w / 2 + camera.x;
+          player.rect.shape.y = camera.h / 2 + camera.y;
+        }
       }
       if (event.type == SDL_QUIT)
       {
@@ -81,12 +88,12 @@ int main(void)
 
     for (int i = 0; i < rect_container.size; ++i)
     {
-      render_fill_rect(renderer, &rect_container.rects[i]);
+      render_fill_rect(renderer, &camera, &rect_container.rects[i]);
     }
 
     move_player_position(&player);
     apply_gravity(&player, &rect_container);
-    render_fill_rect(renderer, &player.rect);
+    render_fill_rect(renderer, &camera, &player.rect);
 
     const int end_frame_time = SDL_GetTicks();
     SDL_Delay(max(10, render_timer - (end_frame_time - start_frame_time)));

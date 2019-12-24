@@ -3,29 +3,29 @@
 
 #include <SDL2/SDL.h>
 
-struct Color
+typedef struct
 {
   int r;
   int g;
   int b;
   int a;
-};
+} Color;
 
-struct Rect
+typedef struct
 {
   SDL_Rect shape;
-  struct Color color;
-};
+  Color color;
+} Rect;
 
-struct Rects
+typedef struct
 {
-  struct Rect *rects;
+  Rect *rects;
   int size;
-};
+} Rects;
 
-struct Rect create_rect(int x, int y, int w, int h, int r, int g, int b, int a);
-void render_fill_rect (SDL_Renderer *renderer, const struct Rect *rect);
-void render_line_rect (SDL_Renderer *renderer, const struct Rect *rect);
+Rect create_rect(int x, int y, int w, int h, int r, int g, int b, int a);
+void render_fill_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect);
+void render_line_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect);
 
 #endif
 

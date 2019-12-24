@@ -5,13 +5,13 @@
 #include "line.h"
 #include "consts.h"
 
-void apply_gravity(struct Player *player, const struct Rects *rects)
+void apply_gravity(Player *player, const Rects *rects)
 {  
   for (int i = 0; i < rects->size; ++i)
   {
-    const struct SDL_Rect r = rects->rects[i].shape;
-    const struct SDL_Rect ps = player->rect.shape;
-    const struct SDL_Rect pr = { .x = ps.x,
+    const SDL_Rect r = rects->rects[i].shape;
+    const SDL_Rect ps = player->rect.shape;
+    const SDL_Rect pr = { .x = ps.x,
                                  .y = ps.y,
                                  .w = ps.w,
                                  .h = ps.h + 1 };

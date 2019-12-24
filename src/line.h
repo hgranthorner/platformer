@@ -14,7 +14,7 @@ struct Line
 };
 
 static inline
-struct Line get_bottom(const struct Rect rect)
+struct Line get_bottom(const Rect rect)
 {
   SDL_Rect r = rect.shape;
   struct Line line = { .x1 = r.x,

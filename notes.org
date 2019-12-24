@@ -31,6 +31,7 @@
 ** IN PROGRESS Add camera
 - How to handle this?
 - [[http://lazyfoo.net/tutorials/SDL/30_scrolling/index.php][Lazy Foo scrolling tutorial]]
+- Need to pass camera to rendering functions
 ** TODO Add double check restraint
 ** TODO Add death and respawn mechanics
 ** TODO Handle level transitions
