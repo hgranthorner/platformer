@@ -26,6 +26,7 @@ void move_player_position(Player *player)
   player->rect.shape.y += player->y_velocity;
 }
 
-void apply_gravity(Player *player, const Rects *rects);
+void apply_gravity(Player *player, const SDL_Rect *camera, const Rects *rects);
+void reset_player_position(Player *player, const SDL_Rect *camera);
 
 #endif

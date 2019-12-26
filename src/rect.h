@@ -15,6 +15,7 @@ typedef struct
 {
   SDL_Rect shape;
   Color color;
+  int damaging;
 } Rect;
 
 typedef struct

@@ -26,7 +26,10 @@ int main(void)
                                               | SDL_RENDERER_PRESENTVSYNC);
   if (!renderer) goto renderer_err;
 
-  SDL_Rect camera = { 0, 0, WIDTH, HEIGHT };
+  SDL_Rect camera = { .x = 0,
+                    .y = 0,
+                    .w = WIDTH,
+                    .h = HEIGHT };
 
   Rect floor = create_rect(0, HEIGHT - 50,
                                   WIDTH, 50,
@@ -39,7 +42,7 @@ int main(void)
 
   Controls controls = { .right = SDL_SCANCODE_RIGHT,
                         .left = SDL_SCANCODE_LEFT,
-                        .jump = SDL_SCANCODE_SPACE };
+                        .jump = SDL_SCANCODE_UP };
   Player player = { .rect = create_rect(10, HEIGHT - 100,
                                         PLAYER_SIZE, PLAYER_SIZE,
                                         0, 255, 255, 255),
@@ -47,27 +50,27 @@ int main(void)
                     .x_velocity = 0,
                     .y_velocity = 0,
                     .jumps_remaining = 2};
-  
+
   int running = 1;
   const int render_timer = roundf(1000.0f / (float) FPS);
-  
+
   while (running)
   {
     const Uint8 *state = SDL_GetKeyboardState(NULL);
 
     if (state[controls.left])
     {
-      player.rect.shape.x -= 5;
+      player.rect.shape.x -= 8;
     }
     if (state[controls.right])
     {
-      player.rect.shape.x += 5;
+      player.rect.shape.x += 8;
     }
 
     SDL_Event event;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    
+
     const int start_frame_time = SDL_GetTicks();
 
     if (SDL_PollEvent(&event))
@@ -101,7 +104,7 @@ int main(void)
 
     move_player_position(&player);
     move_camera(&player, &camera);
-    apply_gravity(&player, &rect_container);
+    apply_gravity(&player, &camera, &rect_container);
     render_fill_rect(renderer, &camera, &player.rect);
 
     const int end_frame_time = SDL_GetTicks();
