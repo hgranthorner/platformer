@@ -6,7 +6,8 @@
 #include "consts.h"
 
 void apply_gravity(Player *player, const SDL_Rect *camera, const Rects *rects)
-{  
+{
+  int landed = 0;
   for (int i = 0; i < rects->size; ++i)
   {
     const SDL_Rect r = rects->rects[i].shape;
@@ -15,23 +16,38 @@ void apply_gravity(Player *player, const SDL_Rect *camera, const Rects *rects)
                           .y = ps.y,
                           .w = ps.w,
                           .h = ps.h + 1 };
-    SDL_bool res = SDL_HasIntersection(&pr, &r);
-    if (res == SDL_TRUE)
+    SDL_Rect res;
+    SDL_bool intersects = SDL_IntersectRect(&pr, &r, &res);
+    if (intersects == SDL_TRUE)
     {
-      player->rect.shape.y = r.y - player->rect.shape.h;
-      player->y_velocity = 0;
+      if (res.h > res.w)
+      {
+        if (ps.x < r.x)
+          player->rect.shape.x = r.x - ps.w;
+        else
+          player->rect.shape.x = r.x + r.w;
+         
+        player->x_velocity = 0;
+      }
+      else
+      {
+        landed = 1;
+        player->rect.shape.y = r.y - player->rect.shape.h;
+        player->y_velocity = 0;        
+      }
       player->jumps_remaining = 2;
       if (rects->rects[i].damaging > 0)
       {
         reset_player_position(player, camera);
       }
     }
-    else
-    {
-      player->y_velocity += player->y_velocity > TERMINAL_VELOCITY
-        ? 0
-        : 1;
-    }
+  }
+
+  if (landed == 0)
+  {
+    player->y_velocity += player->y_velocity > TERMINAL_VELOCITY
+      ? 0
+      : 1;    
   }
 }
 

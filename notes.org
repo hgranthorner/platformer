@@ -36,6 +36,7 @@
 - Done: now handles horizontal scrolling
 ** DONE Add double jump restraint
 ** DONE Add death and respawn mechanics
+** TODO Improve collision
 ** TODO Finish level
 ** TODO Handle level transitions
 ** TODO Add vertical camera

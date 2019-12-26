@@ -7,11 +7,11 @@ Rect create_rect(int x, int y, int w, int h, int r, int g, int b, int a)
 {
   SDL_Rect sdl_rect = { x, y, w, h };
   Color c = { r, g, b, a };
-  Rect rect = { sdl_rect, c };
+  Rect rect = { sdl_rect, c, 0 };
   return rect;
 }
 
-void render_fill_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect)
+void render_fill_rect(SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect)
 {
   if (SDL_HasIntersection(camera, &rect->shape) == SDL_TRUE)
   {
@@ -26,7 +26,7 @@ void render_fill_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rec
   }
 }
 
-void render_line_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect)
+void render_line_rect(SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect)
 {
   if (SDL_HasIntersection(camera, &rect->shape) == SDL_TRUE)
   {

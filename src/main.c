@@ -32,13 +32,16 @@ int main(void)
                     .h = HEIGHT };
 
   Rect floor = create_rect(0, HEIGHT - 50,
-                                  WIDTH, 50,
+                                  4000, 50,
                                   0, 255, 0, 255);
 
-  Rect platform = create_rect(500, 300, 300, 50, 0, 255, 0, 255);
-  Rect rects[] = { floor, platform };
+  Rect platform = create_rect(500, 700, 300, 50, 0, 255, 0, 255);
+  Rect wall_1 = create_rect(1000, 50, 50, 1000, 0, 255, 0, 255);
+  Rect wall_2 = create_rect(1100, 50, 50, 1000, 0, 255, 0, 255);
+  
+  Rect rects[] = { floor, platform, wall_1, wall_2 };
   Rects rect_container = { .rects = rects,
-                                  .size = 2 };
+                                  .size = 4 };
 
   Controls controls = { .right = SDL_SCANCODE_RIGHT,
                         .left = SDL_SCANCODE_LEFT,
