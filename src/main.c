@@ -87,8 +87,7 @@ int main(void)
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_R)
         {
-          player.rect.shape.x = camera.w / 2 + camera.x;
-          player.rect.shape.y = camera.h / 2 + camera.y;
+          reset_player_position(&player, &camera);
         }
       }
       if (event.type == SDL_QUIT)

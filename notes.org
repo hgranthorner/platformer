@@ -23,8 +23,9 @@
    4. Render platforms
    5. Move player
    6. Render player
-   7. Handle FPS control
-   8. Render frame
+   7. Check if level is complete
+   8. Handle FPS control
+   9. Render frame
 4. Handle errors
 5. Close program
 * Tasks
@@ -34,6 +35,7 @@
 - Need to pass camera to rendering functions
 - Done: now handles horizontal scrolling
 ** DONE Add double jump restraint
-** IN PROGRESS Add death and respawn mechanics
+** DONE Add death and respawn mechanics
+** TODO Finish level
 ** TODO Handle level transitions
 ** TODO Add vertical camera

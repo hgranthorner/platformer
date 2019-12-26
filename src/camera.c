@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include "player.h"
+#include "consts.h"
 
 void move_camera(const Player *player, SDL_Rect *camera)
 {
