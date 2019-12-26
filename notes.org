@@ -29,14 +29,15 @@
 4. Handle errors
 5. Close program
 * Tasks
-** DONE IN PROGRESS Add camera
+** DONE Add camera
 - How to handle this?
 - [[http://lazyfoo.net/tutorials/SDL/30_scrolling/index.php][Lazy Foo scrolling tutorial]]
 - Need to pass camera to rendering functions
 - Done: now handles horizontal scrolling
-** DONE Add double jump restraint
-** DONE Add death and respawn mechanics
-** TODO Improve collision
+** DONE Double jump restraint
+** DONE Death and respawn mechanics
+** DONE Improve collision
+** TODO Load level from file
 ** TODO Finish level
 ** TODO Handle level transitions
 ** TODO Add vertical camera
