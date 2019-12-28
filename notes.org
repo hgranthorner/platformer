@@ -29,12 +29,16 @@
 4. Handle errors
 5. Close program
 * Loading Levels
+** Description
+
 A level can be loaded from a .txt file. The files should be saved in the /assets/levels/ path. The .txt file lines should correspond to the following format:
 
 1. Background color
 2. Player model
 3. Number of platforms
 4. The remaining lines should be the list of platforms in the level, one platform per line
+
+** Annotated example
 
 Here is an example file in table format. In an actual file, each row would only have the values separated by spaces.
 
@@ -44,13 +48,14 @@ Line 1 (Background Color):
 |-------+---+---+-----|
 | 0     | 0 | 0 | 255 |
 
-Line 2 (Player):
+Line 2 (Player. Color and controls are set by defaults):
 
-| Rect rect      |    |    |             |   |     |     |              | Controls controls  |                   |                   | int x velocity | int y velocity | int jumps remaining |
-| SDL Rect shape |    |    | Color color |   |     |     | int damaging | SDL Scancode right | SDL Scancode left | SDL Scancode jump |                |                |                     |
-| x              |  y |  w | r           | g |   b |   a |              |                    |                   |                   |                |                |                     |
-|----------------+----+----+-------------+---+-----+-----+--------------+--------------------+-------------------+-------------------+----------------+----------------+---------------------|
-| 50             | 50 | 50 | 0           | 0 | 255 | 255 |            0 | SDL SCANCODE RIGHT | SDL SCANCODE LEFT | SDL SCANCODE UP   |              0 |              0 | 0                   |
+| Rect rect      |    |    |    |
+| SDL Rect shape |    |    |    |
+| x              |  y |  w |  h |
+|----------------+----+----+----|
+| 50             | 50 | 50 | 50 |
+
 
 Line 3 (Number of platforms):
 
@@ -67,10 +72,12 @@ Remaining lines (list of Rect):
 |            400 |  20 |   50 |         255 | 0 | 0 | 255 |            1 |
 |            800 | 200 |  500 |         255 | 0 | 0 | 255 |            0 |
 
+** Example file
+
 Example file:
 
 0 0 0 255
-50 50 50 0 0 255 255 0 SDL SCANCODE RIGHT SDL SCANCODE LEFT SDL SCANCODE UP 0 0 0
+50 50 50 50
 5
 0 0 1000 255 0 0 255 0
 50 300 50 255 0 0 255 1
