@@ -3,11 +3,11 @@
 
 #include "rect.h"
 
-Rect create_rect(int x, int y, int w, int h, int r, int g, int b, int a)
+Rect create_rect(int x, int y, int w, int h, int r, int g, int b, int a, int damaging)
 {
   SDL_Rect sdl_rect = { x, y, w, h };
   Color c = { r, g, b, a };
-  Rect rect = { sdl_rect, c, 0 };
+  Rect rect = { sdl_rect, c, damaging };
   return rect;
 }
 

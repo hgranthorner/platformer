@@ -27,28 +27,29 @@ int main(void)
   if (!renderer) goto renderer_err;
 
   SDL_Rect camera = { .x = 0,
-                    .y = 0,
-                    .w = WIDTH,
-                    .h = HEIGHT };
+                      .y = 0,
+                      .w = WIDTH,
+                      .h = HEIGHT };
 
   Rect floor = create_rect(0, HEIGHT - 50,
-                                  4000, 50,
-                                  0, 255, 0, 255);
+                           4000, 50,
+                           0, 255, 0, 255, 0);
 
-  Rect platform = create_rect(500, 700, 300, 50, 0, 255, 0, 255);
-  Rect wall_1 = create_rect(1000, 50, 50, 1000, 0, 255, 0, 255);
-  Rect wall_2 = create_rect(1100, 50, 50, 1000, 0, 255, 0, 255);
+  Rect platform = create_rect(500, 700, 300, 50, 0, 255, 0, 255, 0);
+  Rect wall_1 = create_rect(1000, 50, 50, 1000, 0, 255, 0, 255, 0);
+  Rect wall_2 = create_rect(1100, 50, 50, 1000, 0, 255, 0, 255, 0);
+  Rect danger_platform = create_rect(1500, 700, 300, 50, 255, 0, 0, 255, 1);
   
-  Rect rects[] = { floor, platform, wall_1, wall_2 };
+  Rect rects[] = { floor, platform, wall_1, wall_2, danger_platform };
   Rects rect_container = { .rects = rects,
-                                  .size = 4 };
+                           .size = 5 };
 
   Controls controls = { .right = SDL_SCANCODE_RIGHT,
                         .left = SDL_SCANCODE_LEFT,
                         .jump = SDL_SCANCODE_UP };
   Player player = { .rect = create_rect(10, HEIGHT - 100,
                                         PLAYER_SIZE, PLAYER_SIZE,
-                                        0, 255, 255, 255),
+                                        0, 255, 255, 255, 0),
                     .controls = controls,
                     .x_velocity = 0,
                     .y_velocity = 0,
