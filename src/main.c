@@ -44,17 +44,10 @@ int main(void)
   Rects rect_container = { .rects = rects,
                            .size = 5 };
 
-  Controls controls = { .right = SDL_SCANCODE_RIGHT,
-                        .left = SDL_SCANCODE_LEFT,
-                        .jump = SDL_SCANCODE_UP };
-  Player player = { .rect = create_rect(10, HEIGHT - 100,
+  Player player = create_player(create_rect(10, HEIGHT - 100,
                                         PLAYER_SIZE, PLAYER_SIZE,
-                                        0, 255, 255, 255, 0),
-                    .controls = controls,
-                    .x_velocity = 0,
-                    .y_velocity = 0,
-                    .jumps_remaining = 2};
-
+                                            0, 255, 255, 255, 0));
+  const Controls controls = player.controls;
   int running = 1;
   const int render_timer = roundf(1000.0f / (float) FPS);
 

@@ -56,3 +56,16 @@ void reset_player_position(Player *player, const SDL_Rect *camera)
   player->rect.shape.x = camera->w / 2 + camera->x;
   player->rect.shape.y = camera->h / 2 + camera->y;
 }
+
+Player create_player(Rect rect)
+{
+    Controls controls = { .right = SDL_SCANCODE_RIGHT,
+                        .left = SDL_SCANCODE_LEFT,
+                        .jump = SDL_SCANCODE_UP };
+    Player player = { .rect = rect,
+                    .controls = controls,
+                    .x_velocity = 0,
+                    .y_velocity = 0,
+                    .jumps_remaining = 2};
+  return player;
+}

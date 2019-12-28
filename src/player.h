@@ -28,5 +28,6 @@ void move_player_position(Player *player)
 
 void apply_gravity(Player *player, const SDL_Rect *camera, const Rects *rects);
 void reset_player_position(Player *player, const SDL_Rect *camera);
+Player create_player(Rect rect);
 
 #endif
