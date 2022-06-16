@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <SDL2/SDL.h>
-#include "rect.h"
 #include "file.h"
+#include "consts.h"
 
 /*
 -background color rgba-
 0 0 0 255
--player xywh-
-50 50 50 50
+-player xy-
+50 50
 -num of platforms-
 5
 -platforms: xywhrgbadamaging-
@@ -35,8 +35,6 @@ void read_file(char *file_path, Load_File_Result *lfr)
   size_t len = 0;
   ssize_t read;
   while ((read = getline(&line, &len, file_pointer)) != -1) {
-    printf("here %d\n", line_number);
-
     to_free = line;
     if (line_number == 0) 
     {
@@ -57,15 +55,14 @@ void read_file(char *file_path, Load_File_Result *lfr)
       {
         vals[i] = atoi(strsep(&line, " "));
       }
-      lfr->player_rect.x = vals[0];
-      lfr->player_rect.y = vals[1]; 
-      lfr->player_rect.w = vals[2]; 
-      lfr->player_rect.h = vals[3];
+      lfr->player = create_player(create_rect(vals[0], vals[1],
+                                  PLAYER_SIZE, PLAYER_SIZE,
+                                  0, 255, 255, 255, 0));
     }
     else if (line_number == 2)
     {
-      lfr->num_platforms = atoi(strsep(&line, " "));
-      lfr->rects = malloc(lfr->num_platforms * sizeof(Rect));
+      lfr->rects.size = atoi(strsep(&line, " "));
+      lfr->rects.rects = malloc(lfr->rects.size * sizeof(Rect));
     }
     else
     {
@@ -91,7 +88,7 @@ void read_file(char *file_path, Load_File_Result *lfr)
         .damaging = vals[8],
       };
 
-      lfr->rects[rect_counter] = rect;
+      lfr->rects.rects[rect_counter] = rect;
 
       rect_counter++;
     }

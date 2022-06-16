@@ -7,6 +7,12 @@
 #include "camera.h"
 #include "file.h"
 
+int text_load_file(void)
+{
+  Load_File_Result lfr;
+  read_file("01.txt", &lfr);
+}
+
 int main(void)
 {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) goto init_err;
