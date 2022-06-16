@@ -99,3 +99,6 @@ Example file:
 ** TODO Finish level
 ** TODO Handle level transitions
 ** TODO Add vertical camera
+
+* Bugs
+** Correctly handle collision with platforms from below
