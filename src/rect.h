@@ -25,8 +25,8 @@ typedef struct
 } Rects;
 
 Rect create_rect(int x, int y, int w, int h, int r, int g, int b, int a, int damaging);
-void render_fill_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect);
-void render_line_rect (SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect);
+void render_fill_rect(SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect);
+void render_line_rect(SDL_Renderer *renderer, const SDL_Rect *camera, const Rect *rect);
 
 #endif
 

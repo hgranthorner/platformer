@@ -1,9 +1,25 @@
-CFLAGS = -I include -L lib -l SDL2-2.0.0 -Werror -pedantic -Wall -Wextra -std=c18
+INCLUDE = -I/opt/homebrew/include
+LIBS = -L/opt/homebrew/lib
+CFLAGS = $(INCLUDE) -D_THREAD_SAFE $(LIBS) -lSDL2 -Werror -pedantic -Wall -Wextra -std=c18
+OBJFILES = src/rect.o src/line.o src/player.o src/camera.o src/main.o
 
-learn_sdl:
-	gcc -c src/rect.c -o src/rect.o
-	gcc -c src/line.c -o src/line.o
-	gcc -c src/player.c -o src/player.o
-	gcc -c src/camera.c -o src/camera.o
-	gcc -c src/main.c -o src/main.o
-	gcc src/rect.o src/line.o src/player.o src/camera.o src/main.o -o play $(CFLAGS)
+.PHONY: all
+all: play
+
+play: $(OBJFILES)
+	gcc $(OBJFILES) -o play $(CFLAGS)
+
+src/rect.o: src/rect.c
+	gcc $(INCLUDE) -c src/rect.c -o src/rect.o
+src/line.o: src/line.c
+	gcc $(INCLUDE) -c src/line.c -o src/line.o
+src/player.o: src/player.c
+	gcc $(INCLUDE) -c src/player.c -o src/player.o
+src/camera.o: src/camera.c
+	gcc $(INCLUDE) -c src/camera.c -o src/camera.o
+src/main.o: src/main.c
+	gcc $(INCLUDE) -c src/main.c -o src/main.o
+
+clean:
+	rm -f src/*.o
+	rm -f play

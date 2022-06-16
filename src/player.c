@@ -33,7 +33,7 @@ void apply_gravity(Player *player, const SDL_Rect *camera, const Rects *rects)
       {
         landed = 1;
         player->rect.shape.y = r.y - player->rect.shape.h;
-        player->y_velocity = 0;        
+        player->y_velocity = 0;
       }
       player->jumps_remaining = 2;
       if (rects->rects[i].damaging > 0)
@@ -63,9 +63,9 @@ Player create_player(Rect rect)
                         .left = SDL_SCANCODE_LEFT,
                         .jump = SDL_SCANCODE_UP };
     Player player = { .rect = rect,
-                    .controls = controls,
-                    .x_velocity = 0,
-                    .y_velocity = 0,
-                    .jumps_remaining = 2};
+                      .controls = controls,
+                      .x_velocity = 0,
+                      .y_velocity = 0,
+                      .jumps_remaining = 2};
   return player;
 }
