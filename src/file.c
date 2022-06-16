@@ -34,7 +34,9 @@ void read_file(char *file_path, Load_File_Result *lfr)
   size_t line_number = 0;
   size_t len = 0;
   ssize_t read;
+  // printf("starting to read file!\n");
   while ((read = getline(&line, &len, file_pointer)) != -1) {
+    // printf("reading line %zu\n", line_number);
     to_free = line;
     if (line_number == 0) 
     {
@@ -50,8 +52,8 @@ void read_file(char *file_path, Load_File_Result *lfr)
     }
     else if (line_number == 1)
     {
-      int vals[4];
-      for (int i = 0; i < 4; i++)
+      int vals[2];
+      for (int i = 0; i < 2; i++)
       {
         vals[i] = atoi(strsep(&line, " "));
       }

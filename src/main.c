@@ -7,7 +7,7 @@
 #include "camera.h"
 #include "file.h"
 
-int text_load_file(void)
+void text_load_file(void)
 {
   Load_File_Result lfr;
   read_file("01.txt", &lfr);
@@ -27,7 +27,6 @@ int main(void)
 
   if (!win) goto window_err;
   printf("Rendered window.\n");
-
   SDL_Renderer *renderer = SDL_CreateRenderer(win, -1,
                                               SDL_RENDERER_ACCELERATED
                                               | SDL_RENDERER_PRESENTVSYNC);
@@ -42,18 +41,16 @@ int main(void)
                            4000, 50,
                            0, 255, 0, 255, 0);
 
-  Rect platform = create_rect(500, 700, 300, 50, 0, 255, 0, 255, 0);
-  Rect wall_1 = create_rect(1000, 50, 50, 1000, 0, 255, 0, 255, 0);
-  Rect wall_2 = create_rect(1100, 50, 50, 1000, 0, 255, 0, 255, 0);
-  Rect danger_platform = create_rect(1500, 700, 300, 50, 255, 0, 0, 255, 1);
-  
-  Rect rects[] = { floor, platform, wall_1, wall_2, danger_platform };
-  Rects rect_container = { .rects = rects,
-                           .size = 5 };
+  Load_File_Result lfr;
+  read_file("levels/01.txt", &lfr);
+  printf("loaded level!\n");
 
-  Player player = create_player(create_rect(10, HEIGHT - 100,
-                                        PLAYER_SIZE, PLAYER_SIZE,
-                                            0, 255, 255, 255, 0));
+  Rects rect_container = lfr.rects;
+  Player player = lfr.player;
+  rect_container.rects = realloc(rect_container.rects, (rect_container.size + 1) * sizeof(Rect));
+  rect_container.size = rect_container.size + 1;
+  rect_container.rects[rect_container.size - 1] = floor;
+
   const Controls controls = player.controls;
   int running = 1;
   const int render_timer = roundf(1000.0f / (float) FPS);
@@ -92,6 +89,10 @@ int main(void)
         if (event.key.keysym.scancode == SDL_SCANCODE_R)
         {
           reset_player_position(&player, &camera);
+        }
+        if (event.key.keysym.scancode == SDL_SCANCODE_Q)
+        {
+          running = 0;
         }
       }
       if (event.type == SDL_QUIT)
