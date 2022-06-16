@@ -5,6 +5,7 @@
 #include "rect.h"
 #include "player.h"
 #include "camera.h"
+#include "file.h"
 
 int main(void)
 {
