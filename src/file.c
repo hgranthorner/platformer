@@ -1,3 +1,4 @@
+#include <dirent.h> 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -100,6 +101,34 @@ void read_file(char *file_path, Load_File_Result *lfr)
   }
 
   fclose(file_pointer);
-  if (line)
-    free(line);
+  if (line) free(line);
+}
+
+
+File_Names get_files(char *directory) {
+  DIR *d;
+  struct dirent *dir;
+  d = opendir(directory);
+
+  File_Names files;
+  files.names = malloc(sizeof(char *) * 50);
+  int file_counter = 0;
+
+  if (d) {
+    while ((dir = readdir(d)) != NULL) {
+      if (dir->d_name[0] == '.') continue;
+      if (file_counter > 49)
+      {
+        printf("Too many files in %s!\n", directory);
+        exit(1);
+      }
+      files.names[file_counter] = strdup(dir->d_name);
+      file_counter++;
+    }
+    closedir(d);
+  }
+
+  files.num_names = file_counter;
+
+  return files;
 }

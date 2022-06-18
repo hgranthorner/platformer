@@ -4,3 +4,4 @@
 /#notes.org#
 /.#notes.org
 /src/*.o
+.DS_Store
