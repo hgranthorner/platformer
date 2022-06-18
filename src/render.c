@@ -2,6 +2,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdlib.h>
 
+#include "render.h"
 #include "consts.h"
 #include "rect.h"
 #include "player.h"
@@ -152,12 +153,23 @@ void render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, int x
   SDL_DestroyTexture(texture);
 }
 
-char *choose_level(SDL_Renderer *renderer)
+Select_Level_Result select_level(SDL_Renderer *renderer)
 {
   File_Names files = get_files("./levels");
   int selected = 0;
   int choosing = 1;
 
+  TTF_Font *font = TTF_OpenFont("assets/Arial.ttf", 24);
+  Select_Level_Result result;
+
+  // + 1 so that we can select the level editor
+  int num_options = files.num_names + 1;
+
+  if (font == NULL)
+  {
+    printf("No font!");
+    exit(-1);
+  }
   const int render_timer = roundf(1000.0f / (float) FPS);
 
   while (choosing)
@@ -167,9 +179,6 @@ char *choose_level(SDL_Renderer *renderer)
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     const int start_frame_time = SDL_GetTicks();
-    TTF_Font *font = TTF_OpenFont("assets/Arial.ttf", 24);
-
-    if (font == NULL) printf("No font!");
 
     if (SDL_PollEvent(&event))
     {
@@ -179,14 +188,26 @@ char *choose_level(SDL_Renderer *renderer)
         {
           selected--;
         }
-        if (event.key.keysym.scancode == SDL_SCANCODE_DOWN && selected < files.num_names)
+
+        if (event.key.keysym.scancode == SDL_SCANCODE_DOWN && selected < num_options)
         {
           selected++;
         }
+
         if (event.key.keysym.scancode == SDL_SCANCODE_RETURN)
         {
-	  return files.names[selected];
+	  if (selected == num_options)
+	  {
+	    result.next_screen = Level_Editor;
+	    result.level = LEVEL_EDITOR;
+	    return result;
+	  }
+
+	  result.next_screen = In_Level;
+	  result.level = files.names[selected];
+	  return result;
         }
+
         if (event.key.keysym.scancode == SDL_SCANCODE_Q)
         {
           choosing = 0;
@@ -204,10 +225,13 @@ char *choose_level(SDL_Renderer *renderer)
     {
       render_text(renderer, font, files.names[i], 100, i * 50 + 50, i == selected);
     }
+    render_text(renderer, font, "Level Editor", 100, num_options * 50 + 50, selected == num_options - 1);
 
     const int end_frame_time = SDL_GetTicks();
     SDL_Delay(max(10, render_timer - (end_frame_time - start_frame_time)));
     SDL_RenderPresent(renderer);
   }
-  return NULL;
+  result.next_screen = Quit;
+  result.level = "";
+  return result;
 }

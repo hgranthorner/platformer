@@ -8,10 +8,13 @@
 #define TERMINAL_VELOCITY 20
 #define JUMP_VELOCITY     20
 
+#define LEVEL_EDITOR "level_editor"
+
 typedef enum {
   Level_Select = 0,
   In_Level = 1,
-  Quit = 2
+  Quit = 2,
+  Level_Editor = 3,
 } Screen_State;
 
 static inline

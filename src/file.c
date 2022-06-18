@@ -120,7 +120,7 @@ File_Names get_files(char *directory) {
       if (file_counter > 49)
       {
         printf("Too many files in %s!\n", directory);
-        exit(1);
+        exit(EXIT_FAILURE);
       }
       files.names[file_counter] = strdup(dir->d_name);
       file_counter++;
