@@ -14,8 +14,18 @@ void text_load_file(void)
 int main(void)
 {
   SDL_Renderer *renderer = init_sdl();
-
-  char *level = choose_level(renderer);
-
-  play_level(renderer, level);
+  Screen_State screen = Level_Select;
+  char *level;
+  while (screen != Quit)
+  {
+    switch (screen)
+    {
+    case Level_Select:
+      level = choose_level(renderer);
+    case In_Level:
+      screen = play_level(renderer, level);
+    default:
+      break;
+    }
+  }
 }

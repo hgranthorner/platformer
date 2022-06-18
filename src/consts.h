@@ -8,6 +8,12 @@
 #define TERMINAL_VELOCITY 20
 #define JUMP_VELOCITY     20
 
+typedef enum {
+  Level_Select = 0,
+  In_Level = 1,
+  Quit = 2
+} Screen_State;
+
 #define IN_LEVEL     0
 #define LEVEL_SELECT 1
 

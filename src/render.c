@@ -8,7 +8,7 @@
 #include "camera.h"
 #include "file.h"
 
-void play_level(SDL_Renderer *renderer, char *level)
+Screen_State play_level(SDL_Renderer *renderer, char *level)
 {
   SDL_Rect camera = { .x = 0,
                       .y = 0,
@@ -70,14 +70,18 @@ void play_level(SDL_Renderer *renderer, char *level)
         {
           reset_player_position(&player, &camera);
         }
+        if (event.key.keysym.scancode == SDL_SCANCODE_L)
+        {
+	  return Level_Select;
+        }
         if (event.key.keysym.scancode == SDL_SCANCODE_Q)
         {
-          running = 0;
+	  return Quit;
         }
       }
       if (event.type == SDL_QUIT)
       {
-        running = 0;
+	return Quit;
       }
     }
 
@@ -95,6 +99,8 @@ void play_level(SDL_Renderer *renderer, char *level)
     SDL_Delay(max(10, render_timer - (end_frame_time - start_frame_time)));
     SDL_RenderPresent(renderer);
   }
+
+  return Quit;
 }
 
 SDL_Renderer *init_sdl()
