@@ -1,4 +1,4 @@
-#include <dirent.h> 
+#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,13 +21,13 @@
 800 200 500 50 255 0 0 255 0
 */
 
-void read_file(char *file_path, Load_File_Result *lfr)
+void read_file(char *file_path, Load_File_Result *out_lfr)
 {
   FILE *file_pointer = fopen(file_path, "r");
   if (file_pointer == NULL) exit(EXIT_FAILURE);
 
   int rect_counter = 0;
-  
+
   char *line = NULL;
   char *to_free = NULL;
   char *token = NULL;
@@ -39,17 +39,17 @@ void read_file(char *file_path, Load_File_Result *lfr)
   while ((read = getline(&line, &len, file_pointer)) != -1) {
     // printf("reading line %zu\n", line_number);
     to_free = line;
-    if (line_number == 0) 
+    if (line_number == 0)
     {
       int vals[4];
       for (int i = 0; i < 4; i++)
       {
         vals[i] = atoi(strsep(&line, " "));
       }
-      lfr->background_color.r = vals[0];
-      lfr->background_color.g = vals[1]; 
-      lfr->background_color.b = vals[2]; 
-      lfr->background_color.a = vals[3];
+      out_lfr->background_color.r = vals[0];
+      out_lfr->background_color.g = vals[1];
+      out_lfr->background_color.b = vals[2];
+      out_lfr->background_color.a = vals[3];
     }
     else if (line_number == 1)
     {
@@ -58,14 +58,14 @@ void read_file(char *file_path, Load_File_Result *lfr)
       {
         vals[i] = atoi(strsep(&line, " "));
       }
-      lfr->player = create_player(create_rect(vals[0], vals[1],
+      out_lfr->player = create_player(create_rect(vals[0], vals[1],
                                   PLAYER_SIZE, PLAYER_SIZE,
                                   0, 255, 255, 255, 0));
     }
     else if (line_number == 2)
     {
-      lfr->rects.size = atoi(strsep(&line, " "));
-      lfr->rects.rects = malloc(lfr->rects.size * sizeof(Rect));
+      out_lfr->rects.size = atoi(strsep(&line, " "));
+      out_lfr->rects.rects = malloc(out_lfr->rects.size * sizeof(Rect));
     }
     else
     {
@@ -91,7 +91,7 @@ void read_file(char *file_path, Load_File_Result *lfr)
         .damaging = vals[8],
       };
 
-      lfr->rects.rects[rect_counter] = rect;
+      out_lfr->rects.rects[rect_counter] = rect;
 
       rect_counter++;
     }

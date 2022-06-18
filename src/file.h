@@ -15,7 +15,7 @@ typedef struct {
   int num_names;
 } File_Names;
 
-void read_file(char *file_path, Load_File_Result *lfr);
+void read_file(char *file_path, Load_File_Result *out_lfr);
 File_Names get_files(char *directory);
 
 #endif
