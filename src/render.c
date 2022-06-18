@@ -199,6 +199,7 @@ char *choose_level(SDL_Renderer *renderer)
       }
     }
 
+    render_text(renderer, font, "Select a level:", 100, 0, 0);
     for (int i = 0; i < files.num_names; i++)
     {
       render_text(renderer, font, files.names[i], 100, i * 50 + 50, i == selected);
