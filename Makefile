@@ -1,5 +1,13 @@
-INCLUDE = -I/opt/homebrew/include
-LIBS = -L/opt/homebrew/lib
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	INCLUDE =
+	LIBS =
+endif
+ifeq ($(UNAME_S),Darwin)
+	INCLUDE = -I/opt/homebrew/include
+	LIBS = -L/opt/homebrew/lib
+endif
+
 CFLAGS = $(INCLUDE) -D_THREAD_SAFE $(LIBS) -lSDL2 -lSDL2_ttf -Werror -pedantic -Wall -Wextra -std=c18
 OBJFILES = src/rect.o src/line.o src/player.o src/camera.o src/main.o src/file.o src/render.o
 
