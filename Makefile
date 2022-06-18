@@ -8,6 +8,7 @@ ifeq ($(UNAME_S),Darwin)
 	LIBS = -L/opt/homebrew/lib
 endif
 
+CC = gcc
 CFLAGS = $(INCLUDE) -D_THREAD_SAFE $(LIBS) -lSDL2 -lSDL2_ttf -Werror -pedantic -Wall -Wextra -std=c18
 OBJFILES = src/rect.o src/line.o src/player.o src/camera.o src/main.o src/file.o src/render.o
 
@@ -15,22 +16,24 @@ OBJFILES = src/rect.o src/line.o src/player.o src/camera.o src/main.o src/file.o
 all: play
 
 play: $(OBJFILES)
-	gcc $(OBJFILES) -o play $(CFLAGS)
+	$(CC) $(OBJFILES) -o play $(CFLAGS)
 
-src/rect.o: src/rect.c
-	gcc $(INCLUDE) -c src/rect.c -o src/rect.o
-src/line.o: src/line.c
-	gcc $(INCLUDE) -c src/line.c -o src/line.o
-src/player.o: src/player.c
-	gcc $(INCLUDE) -c src/player.c -o src/player.o
-src/camera.o: src/camera.c
-	gcc $(INCLUDE) -c src/camera.c -o src/camera.o
-src/main.o: src/main.c
-	gcc $(INCLUDE) -c src/main.c -o src/main.o
-src/file.o: src/file.c
-	gcc $(INCLUDE) -c src/file.c -o src/file.o
-src/render.o: src/render.c
-	gcc $(INCLUDE) -c src/render.c -o src/render.o
+src/.c.o:
+	$(CC) $(INCLUDE) -c $<
+# src/rect.o: src/rect.c
+# 	$(CC) $(INCLUDE) -c $? -o $@
+# src/line.o: src/line.c
+# 	$(CC) $(INCLUDE) -c $? -o $@
+# src/player.o: src/player.c
+# 	$(CC) $(INCLUDE) -c $? -o $@
+# src/camera.o: src/camera.c
+# 	$(CC) $(INCLUDE) -c $? -o $@
+# src/main.o: src/main.c
+# 	$(CC) $(INCLUDE) -c $? -o $@
+# src/file.o: src/file.c
+# 	$(CC) $(INCLUDE) -c $? -o $@
+# src/render.o: src/render.c
+# 	$(CC) $(INCLUDE) -c $? -o $@
 
 clean:
 	rm -f src/*.o

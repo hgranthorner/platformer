@@ -1,3 +1,6 @@
+// enables getline
+#define  _POSIX_C_SOURCE 200809L
+
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,24 +31,33 @@ void read_file(char *file_path, Load_File_Result *out_lfr)
 
   int rect_counter = 0;
 
-  char *line = NULL;
-  char *to_free = NULL;
-  char *token = NULL;
+  char line_arr[200];
+  char *line = (char *)line_arr;
 
   size_t line_number = 0;
   size_t len = 0;
   ssize_t read;
   // printf("starting to read file!\n");
   while ((read = getline(&line, &len, file_pointer)) != -1) {
-    // printf("reading line %zu\n", line_number);
-    to_free = line;
+    int has_read = 0;
     if (line_number == 0)
     {
       int vals[4];
       for (int i = 0; i < 4; i++)
       {
-        vals[i] = atoi(strsep(&line, " "));
+	char *num_str;
+	if (has_read)
+	{
+	  num_str = strtok(NULL, " ");
+	}
+	else
+	{
+	  num_str = strtok(line, " ");
+	  has_read = 1;
+	}
+        vals[i] = atoi(num_str);
       }
+
       out_lfr->background_color.r = vals[0];
       out_lfr->background_color.g = vals[1];
       out_lfr->background_color.b = vals[2];
@@ -56,15 +68,26 @@ void read_file(char *file_path, Load_File_Result *out_lfr)
       int vals[2];
       for (int i = 0; i < 2; i++)
       {
-        vals[i] = atoi(strsep(&line, " "));
+	char *num_str;
+	if (has_read)
+	{
+	  num_str = strtok(NULL, " ");
+	}
+	else
+	{
+	  num_str = strtok(line, " ");
+	  has_read = 1;
+	}
+        vals[i] = atoi(num_str);
       }
+
       out_lfr->player = create_player(create_rect(vals[0], vals[1],
                                   PLAYER_SIZE, PLAYER_SIZE,
                                   0, 255, 255, 255, 0));
     }
     else if (line_number == 2)
     {
-      out_lfr->rects.size = atoi(strsep(&line, " "));
+      out_lfr->rects.size = atoi(strtok(line, " "));
       out_lfr->rects.rects = malloc(out_lfr->rects.size * sizeof(Rect));
     }
     else
@@ -72,7 +95,17 @@ void read_file(char *file_path, Load_File_Result *out_lfr)
       int vals[9];
       for (int i = 0; i < 9; i++)
       {
-        vals[i] = atoi(strsep(&line, " "));
+	char *num_str;
+	if (has_read)
+	{
+	  num_str = strtok(NULL, " ");
+	}
+	else
+	{
+	  num_str = strtok(line, " ");
+	  has_read = 1;
+	}
+        vals[i] = atoi(num_str);
       }
 
       Rect rect = {
@@ -96,7 +129,6 @@ void read_file(char *file_path, Load_File_Result *out_lfr)
       rect_counter++;
     }
 
-    free(to_free);
     line_number++;
   }
 

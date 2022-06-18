@@ -132,8 +132,8 @@ void render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, int x
 {
   int w, h;
   TTF_SizeText(font, text, &w, &h);
-  SDL_Color white = {255, 255, 255};
-  SDL_Color black = {0, 0, 0};
+  SDL_Color white = {255, 255, 255,255};
+  SDL_Color black = {0, 0, 0,255};
   SDL_Surface *surface;
   if (!is_selected)
   {
@@ -175,7 +175,6 @@ Select_Level_Result select_level(SDL_Renderer *renderer)
   while (choosing)
   {
     SDL_Event event;
-    char *level;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     const int start_frame_time = SDL_GetTicks();
@@ -196,7 +195,7 @@ Select_Level_Result select_level(SDL_Renderer *renderer)
 
         if (event.key.keysym.scancode == SDL_SCANCODE_RETURN)
         {
-	  if (selected == num_options)
+	  if (selected == num_options - 1)
 	  {
 	    result.next_screen = Level_Editor;
 	    result.level = LEVEL_EDITOR;
