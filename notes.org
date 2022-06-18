@@ -101,4 +101,8 @@ Example file:
 ** TODO Add vertical camera
 
 * Bugs
+<<<<<<< Updated upstream
 ** Correctly handle collision with platforms from below
+=======
+** TODO Add collision when hitting platform from the bottom
+>>>>>>> Stashed changes

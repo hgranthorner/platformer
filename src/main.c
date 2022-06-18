@@ -17,14 +17,5 @@ int main(void)
 
   char *level = choose_level(renderer);
 
-  play_level(renderer);
-
- // renderer_err:
- //  if (renderer) SDL_DestroyRenderer(renderer);
- // window_err:
- //  if (win) SDL_DestroyWindow(win);
- // init_err:
- //  if (strlen(SDL_GetError()) > 1) printf("SDL Error: %s\n", SDL_GetError());
- //  SDL_Quit();
- //  return 1;
+  play_level(renderer, level);
 }

@@ -8,7 +8,7 @@
 #include "camera.h"
 #include "file.h"
 
-void play_level(SDL_Renderer *renderer)
+void play_level(SDL_Renderer *renderer, char *level)
 {
   SDL_Rect camera = { .x = 0,
                       .y = 0,
@@ -20,8 +20,10 @@ void play_level(SDL_Renderer *renderer)
                            0, 255, 0, 255, 0);
 
   Load_File_Result lfr;
-  read_file("levels/01.txt", &lfr);
-  printf("loaded level!\n");
+  char level_name[100];
+  sprintf(level_name, "levels/%s", level);
+  read_file(level_name, &lfr);
+  printf("loaded level %s!\n", level);
 
   Rects rect_container = lfr.rects;
   Player player = lfr.player;
@@ -119,13 +121,25 @@ SDL_Renderer *init_sdl()
   return renderer;
 }
 
-void render_text(SDL_Renderer *renderer, TTF_Font* font, char *text, SDL_Rect rect)
+void render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, int x, int y, int is_selected)
 {
+  int w, h;
+  TTF_SizeText(font, text, &w, &h);
   SDL_Color white = {255, 255, 255};
-  SDL_Surface *surface = TTF_RenderText_Solid(font, text, white); 
+  SDL_Color black = {0, 0, 0};
+  SDL_Surface *surface;
+  if (!is_selected)
+  {
+    surface = TTF_RenderText_Shaded(font, text, white, black);
+  }
+  else
+  {
+    surface = TTF_RenderText_Shaded(font, text, black, white);
+  }
 
   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
 
+  SDL_Rect rect = {.x = x, .y = y, .w = w, .h = h};
   SDL_RenderCopy(renderer, texture, NULL, &rect);
 
   SDL_FreeSurface(surface);
@@ -138,18 +152,19 @@ char *choose_level(SDL_Renderer *renderer)
   int selected = 0;
   int choosing = 1;
 
-  const int render_timer = roundf(1000.0f / (float) FPS);  
+  const int render_timer = roundf(1000.0f / (float) FPS);
 
   while (choosing)
   {
     SDL_Event event;
+    char *level;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     const int start_frame_time = SDL_GetTicks();
-    TTF_Font* font = TTF_OpenFont("assets/Arial.ttf", 24);
+    TTF_Font *font = TTF_OpenFont("assets/Arial.ttf", 24);
 
     if (font == NULL) printf("No font!");
-    
+
     if (SDL_PollEvent(&event))
     {
       if (event.type == SDL_KEYDOWN)
@@ -161,6 +176,10 @@ char *choose_level(SDL_Renderer *renderer)
         if (event.key.keysym.scancode == SDL_SCANCODE_DOWN && selected < files.num_names)
         {
           selected++;
+        }
+        if (event.key.keysym.scancode == SDL_SCANCODE_RETURN)
+        {
+	  return files.names[selected];
         }
         if (event.key.keysym.scancode == SDL_SCANCODE_Q)
         {
@@ -176,14 +195,12 @@ char *choose_level(SDL_Renderer *renderer)
 
     for (int i = 0; i < files.num_names; i++)
     {
-      printf("%s\n", files.names[i]);
-      SDL_Rect rect = {.x = 100, .y = 100 * i + 100, .w = 100, .h = 100};
-      render_text(renderer, font, files.names[i], rect);
+      render_text(renderer, font, files.names[i], 100, i * 50 + 50, i == selected);
     }
 
     const int end_frame_time = SDL_GetTicks();
     SDL_Delay(max(10, render_timer - (end_frame_time - start_frame_time)));
     SDL_RenderPresent(renderer);
   }
-  return "";
+  return NULL;
 }
