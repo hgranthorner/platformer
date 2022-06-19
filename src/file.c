@@ -45,11 +45,11 @@ char *read_file(char *file_name)
   return buffer;
 }
 
-Lines get_lines(char *file_path)
+Lines get_lines(char *buffer)
 {
-  char *file_contents = read_file(file_path);
+  char *buffer_copy = buffer;
   char *lines[100];
-  char *line = strtok(file_contents, "\n");
+  char *line = strtok(buffer_copy, "\n");
   lines[0] = line;
   int counter = 1;
 
@@ -85,7 +85,8 @@ Lines get_lines(char *file_path)
 
 void load_file(char *file_path, Load_File_Result *out_lfr)
 {
-  Lines file_lines = get_lines(file_path);
+  char *file_contents = read_file(file_path);
+  Lines file_lines = get_lines(file_contents);
   int rect_counter = 0;
 
   /* printf("starting to read file!\n"); */

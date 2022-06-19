@@ -18,22 +18,26 @@ all: play
 play: $(OBJFILES)
 	$(CC) $(OBJFILES) -o play $(CFLAGS)
 
-src/.c.o:
-	$(CC) $(INCLUDE) -c $<
-# src/rect.o: src/rect.c
-# 	$(CC) $(INCLUDE) -c $? -o $@
-# src/line.o: src/line.c
-# 	$(CC) $(INCLUDE) -c $? -o $@
-# src/player.o: src/player.c
-# 	$(CC) $(INCLUDE) -c $? -o $@
-# src/camera.o: src/camera.c
-# 	$(CC) $(INCLUDE) -c $? -o $@
-# src/main.o: src/main.c
-# 	$(CC) $(INCLUDE) -c $? -o $@
-# src/file.o: src/file.c
-# 	$(CC) $(INCLUDE) -c $? -o $@
-# src/render.o: src/render.c
-# 	$(CC) $(INCLUDE) -c $? -o $@
+src/rect.o: src/rect.c src/rect.h
+	$(CC) $(INCLUDE) -c $< -o $@
+
+src/line.o: src/line.c src/line.h
+	$(CC) $(INCLUDE) -c $< -o $@
+
+src/player.o: src/player.c src/player.h src/line.o src/rect.o src/consts.h
+	$(CC) $(INCLUDE) -c $< -o $@
+
+src/camera.o: src/camera.c src/camera.h src/player.o src/consts.h
+	$(CC) $(INCLUDE) -c $< -o $@
+
+src/file.o: src/file.c src/file.h src/rect.o src/player.o src/consts.h
+	$(CC) $(INCLUDE) -c $< -o $@
+
+src/render.o: src/render.c src/render.h src/consts.h src/rect.o src/player.o src/camera.o src/file.o
+	$(CC) $(INCLUDE) -c $< -o $@
+
+src/main.o: src/main.c src/render.o
+	$(CC) $(INCLUDE) -c $< -o $@
 
 clean:
 	rm -f src/*.o
