@@ -1,6 +1,3 @@
-// enables getline
-#define  _POSIX_C_SOURCE 200809L
-
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +5,10 @@
 #include <SDL2/SDL.h>
 #include "file.h"
 #include "consts.h"
+
+// enables getline - needs to be enabled after SDL due to macOS
+// framework issue.
+#define  _POSIX_C_SOURCE 200809L
 
 /*
 -background color rgba-
@@ -31,14 +32,17 @@ void read_file(char *file_path, Load_File_Result *out_lfr)
 
   int rect_counter = 0;
 
-  char line_arr[200];
-  char *line = (char *)line_arr;
+  char *line = NULL;
 
   size_t line_number = 0;
   size_t len = 0;
   ssize_t read;
-  // printf("starting to read file!\n");
+
+  /* printf("starting to read file!\n"); */
   while ((read = getline(&line, &len, file_pointer)) != -1) {
+
+    char *original_pointer = line;
+    /* printf("reading line %s\n", line); */
     int has_read = 0;
     if (line_number == 0)
     {
@@ -129,6 +133,7 @@ void read_file(char *file_path, Load_File_Result *out_lfr)
       rect_counter++;
     }
 
+    line = original_pointer;
     line_number++;
   }
 
