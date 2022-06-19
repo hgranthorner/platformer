@@ -23,7 +23,7 @@ Screen_State play_level(SDL_Renderer *renderer, char *level)
   Load_File_Result lfr;
   char level_name[100];
   sprintf(level_name, "levels/%s", level);
-  read_file(level_name, &lfr);
+  load_file(level_name, &lfr);
   printf("loaded level %s!\n", level);
 
   Rects rect_container = lfr.rects;

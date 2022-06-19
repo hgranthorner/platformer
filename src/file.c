@@ -6,9 +6,67 @@
 #include "file.h"
 #include "consts.h"
 
-// enables getline - needs to be enabled after SDL due to macOS
-// framework issue.
-#define  _POSIX_C_SOURCE 200809L
+char *read_file(char *file_name)
+{
+  FILE *fp;
+  long buffer_size;
+  char *buffer;
+
+  fp = fopen(file_name, "rb");
+  if (!fp)
+  {
+    perror(file_name);
+    exit(1);
+  }
+
+  fseek(fp , 0L, SEEK_END);
+  buffer_size = ftell(fp);
+  rewind(fp);
+
+/* allocate memory for entire content */
+  buffer = calloc(1, buffer_size+1);
+  if (!buffer)
+  {
+    fclose(fp);
+    fputs("memory alloc when reading file fails", stderr);
+    exit(1);
+  }
+
+/* copy the file into the buffer */
+  if (1 != fread(buffer, buffer_size, 1, fp))
+  {
+    fclose(fp);
+    free(buffer);
+    fputs("entire read fails", stderr);
+    exit(1);
+  }
+
+  fclose(fp);
+  return buffer;
+}
+
+Lines get_lines(char *file_path)
+{
+  char *file_contents = read_file(file_path);
+  char *lines[100];
+  char *line = strtok(file_contents, "\n");
+  lines[0] = line;
+  int counter = 1;
+
+  while ((line = strtok(NULL, "\n")) != NULL)
+  {
+    lines[counter] = line;
+    counter++;
+  }
+
+  for (int i = 0; i < counter; i++)
+  {
+    printf("%d: %s\n", i, lines[i]);
+  }
+
+  Lines lines_struct = {.lines = lines, .num_lines = counter};
+  return lines_struct;
+}
 
 /*
 -background color rgba-
@@ -25,23 +83,14 @@
 800 200 500 50 255 0 0 255 0
 */
 
-void read_file(char *file_path, Load_File_Result *out_lfr)
+void load_file(char *file_path, Load_File_Result *out_lfr)
 {
-  FILE *file_pointer = fopen(file_path, "r");
-  if (file_pointer == NULL) exit(EXIT_FAILURE);
-
+  Lines file_lines = get_lines(file_path);
   int rect_counter = 0;
 
-  char *line = NULL;
-
-  size_t line_number = 0;
-  size_t len = 0;
-  ssize_t read;
-
   /* printf("starting to read file!\n"); */
-  while ((read = getline(&line, &len, file_pointer)) != -1) {
-
-    char *original_pointer = line;
+  for (int line_number = 0; line_number < file_lines.num_lines; line_number++) {
+    char *line = file_lines.lines[line_number];
     /* printf("reading line %s\n", line); */
     int has_read = 0;
     if (line_number == 0)
@@ -132,13 +181,7 @@ void read_file(char *file_path, Load_File_Result *out_lfr)
 
       rect_counter++;
     }
-
-    line = original_pointer;
-    line_number++;
   }
-
-  fclose(file_pointer);
-  if (line) free(line);
 }
 
 

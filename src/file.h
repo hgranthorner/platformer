@@ -15,7 +15,12 @@ typedef struct {
   int num_names;
 } File_Names;
 
-void read_file(char *file_path, Load_File_Result *out_lfr);
+typedef struct {
+  char **lines;
+  int num_lines;
+} Lines;
+
+void load_file(char *file_path, Load_File_Result *out_lfr);
 File_Names get_files(char *directory);
 
 #endif
