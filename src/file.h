@@ -8,7 +8,7 @@ typedef struct {
   Color background_color;
   Player player;
   Rects rects;
-} Load_File_Result;
+} Level;
 
 typedef struct {
   char **names;
@@ -20,7 +20,7 @@ typedef struct {
   int num_lines;
 } Lines;
 
-void load_file(char *file_path, Load_File_Result *out_lfr);
+void load_file(char *file_path, Level *out_lfr);
 File_Names get_files(char *directory);
 
 #endif

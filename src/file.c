@@ -83,7 +83,7 @@ Lines get_lines(char *buffer)
 800 200 500 50 255 0 0 255 0
 */
 
-void load_file(char *file_path, Load_File_Result *out_lfr)
+void load_file(char *file_path, Level *out_level)
 {
   char *file_contents = read_file(file_path);
   Lines file_lines = get_lines(file_contents);
@@ -112,10 +112,10 @@ void load_file(char *file_path, Load_File_Result *out_lfr)
         vals[i] = atoi(num_str);
       }
 
-      out_lfr->background_color.r = vals[0];
-      out_lfr->background_color.g = vals[1];
-      out_lfr->background_color.b = vals[2];
-      out_lfr->background_color.a = vals[3];
+      out_level->background_color.r = vals[0];
+      out_level->background_color.g = vals[1];
+      out_level->background_color.b = vals[2];
+      out_level->background_color.a = vals[3];
     }
     else if (line_number == 1)
     {
@@ -135,14 +135,14 @@ void load_file(char *file_path, Load_File_Result *out_lfr)
         vals[i] = atoi(num_str);
       }
 
-      out_lfr->player = create_player(create_rect(vals[0], vals[1],
+      out_level->player = create_player(create_rect(vals[0], vals[1],
                                   PLAYER_SIZE, PLAYER_SIZE,
                                   0, 255, 255, 255, 0));
     }
     else if (line_number == 2)
     {
-      out_lfr->rects.size = atoi(strtok(line, " "));
-      out_lfr->rects.rects = malloc(out_lfr->rects.size * sizeof(Rect));
+      out_level->rects.size = atoi(strtok(line, " "));
+      out_level->rects.rects = malloc(out_level->rects.size * sizeof(Rect));
     }
     else
     {
@@ -178,7 +178,7 @@ void load_file(char *file_path, Load_File_Result *out_lfr)
         .damaging = vals[8],
       };
 
-      out_lfr->rects.rects[rect_counter] = rect;
+      out_level->rects.rects[rect_counter] = rect;
 
       rect_counter++;
     }

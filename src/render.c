@@ -9,7 +9,7 @@
 #include "camera.h"
 #include "file.h"
 
-Screen_State play_level(SDL_Renderer *renderer, char *level)
+Screen_State play_level(SDL_Renderer *renderer, char *level_name)
 {
   SDL_Rect camera = { .x = 0,
                       .y = 0,
@@ -20,14 +20,14 @@ Screen_State play_level(SDL_Renderer *renderer, char *level)
                            4000, 50,
                            0, 255, 0, 255, 0);
 
-  Load_File_Result lfr;
-  char level_name[100];
-  sprintf(level_name, "levels/%s", level);
-  load_file(level_name, &lfr);
-  printf("loaded level %s!\n", level);
+  Level level;
+  char file_path[100];
+  sprintf(file_path, "levels/%s", level_name);
+  load_file(file_path, &level);
+  printf("loaded level %s!\n", level_name);
 
-  Rects rect_container = lfr.rects;
-  Player player = lfr.player;
+  Rects rect_container = level.rects;
+  Player player = level.player;
   rect_container.rects = realloc(rect_container.rects, (rect_container.size + 1) * sizeof(Rect));
   rect_container.size = rect_container.size + 1;
   rect_container.rects[rect_container.size - 1] = floor;
@@ -156,7 +156,7 @@ void render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, int x
 Select_Level_Result select_level(SDL_Renderer *renderer)
 {
   File_Names files = get_files("./levels");
-  int selected = 0;
+  int selected_index = 0;
   int choosing = 1;
 
   TTF_Font *font = TTF_OpenFont("assets/Arial.ttf", 24);
@@ -183,27 +183,27 @@ Select_Level_Result select_level(SDL_Renderer *renderer)
     {
       if (event.type == SDL_KEYDOWN)
       {
-        if (event.key.keysym.scancode == SDL_SCANCODE_UP && selected > 0)
+        if (event.key.keysym.scancode == SDL_SCANCODE_UP && selected_index > 0)
         {
-          selected--;
+          selected_index--;
         }
 
-        if (event.key.keysym.scancode == SDL_SCANCODE_DOWN && selected < num_options)
+        if (event.key.keysym.scancode == SDL_SCANCODE_DOWN && selected_index < num_options)
         {
-          selected++;
+          selected_index++;
         }
 
         if (event.key.keysym.scancode == SDL_SCANCODE_RETURN)
         {
-	  if (selected == num_options - 1)
+	  if (selected_index == num_options - 1)
 	  {
 	    result.next_screen = Level_Editor;
-	    result.level = LEVEL_EDITOR;
+	    result.level_name = NULL;
 	    return result;
 	  }
 
 	  result.next_screen = In_Level;
-	  result.level = files.names[selected];
+	  result.level_name = files.names[selected_index];
 	  return result;
         }
 
@@ -222,15 +222,15 @@ Select_Level_Result select_level(SDL_Renderer *renderer)
     render_text(renderer, font, "Select a level:", 100, 0, 0);
     for (int i = 0; i < files.num_names; i++)
     {
-      render_text(renderer, font, files.names[i], 100, i * 50 + 50, i == selected);
+      render_text(renderer, font, files.names[i], 100, i * 50 + 50, i == selected_index);
     }
-    render_text(renderer, font, "Level Editor", 100, num_options * 50 + 50, selected == num_options - 1);
+    render_text(renderer, font, "Level Editor", 100, num_options * 50 + 50, selected_index == num_options - 1);
 
     const int end_frame_time = SDL_GetTicks();
     SDL_Delay(max(10, render_timer - (end_frame_time - start_frame_time)));
     SDL_RenderPresent(renderer);
   }
   result.next_screen = Quit;
-  result.level = "";
+  result.level_name = "";
   return result;
 }

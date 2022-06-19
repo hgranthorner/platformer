@@ -10,7 +10,7 @@ endif
 
 CC = gcc
 CFLAGS = $(INCLUDE) -D_THREAD_SAFE $(LIBS) -lSDL2 -lSDL2_ttf -Werror -pedantic -Wall -Wextra -std=c18
-OBJFILES = src/rect.o src/line.o src/player.o src/camera.o src/main.o src/file.o src/render.o
+OBJFILES = src/rect.o src/line.o src/player.o src/camera.o src/main.o src/file.o src/render.o src/editor.o
 
 .PHONY: all
 all: play
@@ -36,7 +36,10 @@ src/file.o: src/file.c src/file.h src/rect.o src/player.o src/consts.h
 src/render.o: src/render.c src/render.h src/consts.h src/rect.o src/player.o src/camera.o src/file.o
 	$(CC) $(INCLUDE) -c $< -o $@
 
-src/main.o: src/main.c src/render.o
+src/editor.o: src/editor.c src/editor.h src/consts.h src/file.o
+	$(CC) $(INCLUDE) -c $< -o $@
+
+src/main.o: src/main.c src/render.o src/editor.o
 	$(CC) $(INCLUDE) -c $< -o $@
 
 clean:

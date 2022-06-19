@@ -6,7 +6,7 @@
 
 typedef struct {
   Screen_State next_screen;
-  char *level;
+  char *level_name;
 } Select_Level_Result;
 
 Screen_State play_level(SDL_Renderer *renderer, char *level);
