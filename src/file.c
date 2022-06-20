@@ -6,6 +6,9 @@
 #include "file.h"
 #include "consts.h"
 
+#define _POSIX_C_SOURCE 200809L
+extern char* strdup(const char*);
+
 char *read_file(char *file_name)
 {
   FILE *fp;

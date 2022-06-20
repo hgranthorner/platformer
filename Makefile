@@ -1,15 +1,15 @@
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
-	INCLUDE =
+	INCLUDE = -Werror -pedantic -Wall -Wextra -std=c18
 	LIBS =
 endif
 ifeq ($(UNAME_S),Darwin)
-	INCLUDE = -I/opt/homebrew/include
+	INCLUDE = -I/opt/homebrew/include -Werror -pedantic -Wall -Wextra -std=c18
 	LIBS = -L/opt/homebrew/lib
 endif
 
 CC = gcc
-CFLAGS = $(INCLUDE) -D_THREAD_SAFE $(LIBS) -lSDL2 -lSDL2_ttf -Werror -pedantic -Wall -Wextra -std=c18
+CFLAGS = $(INCLUDE) -D_THREAD_SAFE $(LIBS) -lSDL2 -lSDL2_ttf
 OBJFILES = src/rect.o src/line.o src/player.o src/camera.o src/main.o src/file.o src/render.o src/editor.o
 
 .PHONY: all

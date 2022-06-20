@@ -13,21 +13,103 @@ void initialize_default_level(Level *level)
   level->rects            = rects;
 }
 
-void input_level_name(char *level_name)
+static
+void render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, int x, int y, int is_selected)
 {
-  SDL_Window *win = SDL_CreateWindow("Enter File Name",
+  int w, h;
+  TTF_SizeText(font, text, &w, &h);
+  SDL_Color white = {255, 255, 255,255};
+  SDL_Color black = {0, 0, 0,255};
+  SDL_Surface *surface;
+  if (!is_selected)
+  {
+    surface = TTF_RenderText_Shaded(font, text, white, black);
+  }
+  else
+  {
+    surface = TTF_RenderText_Shaded(font, text, black, white);
+  }
+
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+  SDL_Rect rect = {.x = x, .y = y, .w = w, .h = h};
+  SDL_RenderCopy(renderer, texture, NULL, &rect);
+
+  SDL_FreeSurface(surface);
+  SDL_DestroyTexture(texture);
+}
+
+
+// level_name must be no more than MAX_FILE_PATH_LENGTH in length
+void input_level_name(char **level_name)
+{
+  SDL_Window *window = SDL_CreateWindow("Enter File Name",
                                      SDL_WINDOWPOS_CENTERED,
                                      SDL_WINDOWPOS_CENTERED,
                                      200,
                                      100,
                                      SDL_WINDOW_OPENGL);
 
-  if (!win) return NULL;
-  SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  if (!window) return;
+  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-  if (!renderer) return NULL;
+  if (!renderer) return;
+
+  TTF_Font *font = TTF_OpenFont("assets/Arial.ttf", 24);
+  if (!font)
+  {
+    printf("No font!");
+    exit(-1);
+  }
+
+  int texting = 1;
+  const int render_timer = roundf(1000.0f / (float) FPS);
+
+  SDL_Rect input_rect = { .x = 0, .y = 0, .w = 200, .h = 100 };
+  SDL_SetTextInputRect(&input_rect);
+  SDL_StartTextInput();
 
 
+  while (texting)
+  {
+    SDL_Event event;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    const int start_frame_time = SDL_GetTicks();
+
+    if (SDL_PollEvent(&event))
+    {
+      SDL_Keymod mod = SDL_GetModState();
+
+      if (event.type == SDL_KEYDOWN)
+      {
+        if (event.key.keysym.scancode == SDL_SCANCODE_Q && (mod & KMOD_CTRL))
+          break;
+      }
+
+      if (event.type == SDL_TEXTINPUT)
+      {
+        printf("accepting text input: %s\n", event.text.text);
+        strcat(*level_name, event.text.text);
+      }
+    }
+
+    if (0)
+    {
+      render_text(renderer, font, "", 0, 0, 0);
+    }
+
+    SDL_RenderDrawRect(renderer, &input_rect);
+
+    const int end_frame_time = SDL_GetTicks();
+    SDL_Delay(max(10, render_timer - (end_frame_time - start_frame_time)));
+    SDL_RenderPresent(renderer);
+  }
+
+  TTF_CloseFont(font);
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyWindow(window);
 }
 
 Screen_State edit_level(SDL_Renderer *renderer, Level *level)
@@ -42,13 +124,6 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
                       .y = 0,
                       .w = WIDTH,
                       .h = HEIGHT };
-
-  TTF_Font *font = TTF_OpenFont("assets/Arial.ttf", 24);
-  if (!font)
-  {
-    printf("No font!");
-    exit(-1);
-  }
 
   int editing            = 1;
   int player_selected    = 0;
@@ -142,7 +217,10 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
 
           if (event.key.keysym.scancode == SDL_SCANCODE_S)
           {
-            write_level(level, "./levels/test.txt");
+            char level_name[MAX_FILE_PATH_LENGTH] = {0};
+            char *level_name_p = (char *)level_name;
+            input_level_name(&level_name_p);
+            write_level(level, level_name);
             return Level_Select;
           }
 

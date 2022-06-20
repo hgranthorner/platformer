@@ -67,14 +67,17 @@ Screen_State play_level(SDL_Renderer *renderer, char *level_name)
             player.y_velocity = -JUMP_VELOCITY;
           }
         }
+
         if (event.key.keysym.scancode == SDL_SCANCODE_R)
         {
           reset_player_position(&player, &camera);
         }
+
         if (event.key.keysym.scancode == SDL_SCANCODE_L)
         {
 	  return Level_Select;
         }
+
         if (event.key.keysym.scancode == SDL_SCANCODE_Q)
         {
 	  return Quit;
