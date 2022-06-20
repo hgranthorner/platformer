@@ -40,3 +40,15 @@ void render_line_rect(SDL_Renderer *renderer, const SDL_Rect *camera, const Rect
     SDL_RenderDrawRect(renderer, &r);
   }
 }
+
+void add_rect(Rects *rects, Rect rect)
+{
+  if (rects->size == rects->capacity)
+  {
+    rects->capacity = rects->capacity * 2;
+    rects->rects = realloc(rects->rects, sizeof(Rect) * rects->capacity);
+  }
+
+  rects->rects[rects->size] = rect;
+  rects->size++;
+}
