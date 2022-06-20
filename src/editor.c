@@ -13,6 +13,23 @@ void initialize_default_level(Level *level)
   level->rects            = rects;
 }
 
+void input_level_name(char *level_name)
+{
+  SDL_Window *win = SDL_CreateWindow("Enter File Name",
+                                     SDL_WINDOWPOS_CENTERED,
+                                     SDL_WINDOWPOS_CENTERED,
+                                     200,
+                                     100,
+                                     SDL_WINDOW_OPENGL);
+
+  if (!win) return NULL;
+  SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+  if (!renderer) return NULL;
+
+
+}
+
 Screen_State edit_level(SDL_Renderer *renderer, Level *level)
 {
   if (level->rects.size == 0)
