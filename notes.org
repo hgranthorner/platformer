@@ -98,6 +98,8 @@ Example file:
 ** DONE Load level from file
 ** DONE Refactor get_line
 ** DONE Create level editor
+** DONE Migrate away from strsep
+** TODO Add tests
 ** TODO Finish level
 ** TODO Handle level transitions
 ** TODO Add vertical camera
