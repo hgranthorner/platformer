@@ -7,7 +7,7 @@ void initialize_default_level(Level *level)
 {
   Player player = create_player(create_rect(10, 10, PLAYER_SIZE, PLAYER_SIZE, 0, 255, 255, 255, 0));
   Color black      = { .r = 0, .g = 0, .b = 0, .a = 255 };
-  Rects rects	   = { .rects    = NULL, .size = 0 };
+  Rects rects	   = { .rects = malloc(sizeof(Rect)), .size = 0, .capacity = 1 };
   level->background_color = black;
   level->player           = player;
   level->rects            = rects;
@@ -33,9 +33,10 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
     exit(-1);
   }
 
-  int editing = 1;
-  int player_selected = 0;
+  int editing            = 1;
+  int player_selected    = 0;
   const int render_timer = roundf(1000.0f / (float) FPS);
+  int platform_selected_index = -1;
 
   while (editing)
   {
@@ -55,11 +56,21 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
           printf("Clicked on player!\n");
           player_selected = 1;
         }
+
+        for (int i = 0; i < level->rects.size; i++)
+        {
+          if (SDL_PointInRect(&p, &level->rects.rects[i].shape))
+          {
+            printf("Clicked on rect %d!\n", i);
+            platform_selected_index = i;
+          }
+        }
       }
 
       if (event.type == SDL_MOUSEBUTTONUP)
       {
         player_selected = 0;
+        platform_selected_index = -1;
       }
 
       if (event.type == SDL_MOUSEMOTION && event.motion.state & SDL_BUTTON_LMASK)
@@ -69,6 +80,12 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
           level->player.rect.shape.x = event.motion.x - PLAYER_SIZE / 2;
           level->player.rect.shape.y = event.motion.y - PLAYER_SIZE / 2;
         }
+
+        if (platform_selected_index != -1)
+        {
+          level->rects.rects[platform_selected_index].shape.x = event.motion.x - PLAYER_SIZE / 2;
+          level->rects.rects[platform_selected_index].shape.y = event.motion.y - PLAYER_SIZE / 2;
+        }
       }
 
       if (event.type == SDL_KEYDOWN)
@@ -77,10 +94,23 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
         {
 	  return Level_Select;
         }
+
         if (event.key.keysym.scancode == SDL_SCANCODE_S)
         {
           write_level(level, "./levels/test.txt");
 	  return Level_Select;
+        }
+
+        if (event.key.keysym.scancode == SDL_SCANCODE_A)
+        {
+          Rect rect = create_rect(100, 200, 100, 100, 0, 255, 0, 255, 0);
+          add_rect(&level->rects, rect);
+        }
+
+        if (event.key.keysym.scancode == SDL_SCANCODE_D)
+        {
+          Rect rect = create_rect(100, 200, 100, 100, 255, 0, 0, 255, 1);
+          add_rect(&level->rects, rect);
         }
 
         if (event.key.keysym.scancode == SDL_SCANCODE_Q)

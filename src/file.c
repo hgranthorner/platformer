@@ -142,6 +142,7 @@ void load_file(char *file_path, Level *out_level)
     else if (line_number == 2)
     {
       out_level->rects.size = atoi(strtok(line, " "));
+      out_level->rects.capacity = out_level->rects.size;
       out_level->rects.rects = malloc(out_level->rects.size * sizeof(Rect));
     }
     else
