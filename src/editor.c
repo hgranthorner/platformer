@@ -43,16 +43,17 @@ void render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, int x
 // level_name must be no more than MAX_FILE_PATH_LENGTH in length
 void input_level_name(char **level_name)
 {
+  (void)level_name;
   SDL_Window *window = SDL_CreateWindow("Enter File Name",
                                      SDL_WINDOWPOS_CENTERED,
                                      SDL_WINDOWPOS_CENTERED,
+                                     400,
                                      200,
-                                     100,
                                      SDL_WINDOW_OPENGL);
 
   if (!window) return;
-  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (!renderer) return;
 
   TTF_Font *font = TTF_OpenFont("assets/Arial.ttf", 24);
@@ -69,6 +70,9 @@ void input_level_name(char **level_name)
   SDL_SetTextInputRect(&input_rect);
   SDL_StartTextInput();
 
+  char composition[MAX_FILE_PATH_LENGTH] = {0};
+  int char_index = 0;
+  int first_event = 1;
 
   while (texting)
   {
@@ -84,21 +88,38 @@ void input_level_name(char **level_name)
 
       if (event.type == SDL_KEYDOWN)
       {
-        if (event.key.keysym.scancode == SDL_SCANCODE_Q && (mod & KMOD_CTRL))
+        if ((event.key.keysym.scancode == SDL_SCANCODE_Q && (mod & KMOD_CTRL)) ||
+            event.key.keysym.scancode == SDL_SCANCODE_RETURN)
           break;
+
+        if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
+        {
+          char_index--;
+          composition[char_index] = 0;
+          printf("backspace: %s\n", composition);
+        }
       }
 
       if (event.type == SDL_TEXTINPUT)
       {
-        printf("accepting text input: %s\n", event.text.text);
-        strcat(*level_name, event.text.text);
+        strcat(composition, event.text.text);
+        char_index++;
+      }
+
+      if (event.type == SDL_QUIT)
+        break;
+
+      if (first_event)
+      {
+        first_event = 0;
+        composition[0] = 0;
+        char_index = 0;
       }
     }
 
-    if (0)
-    {
-      render_text(renderer, font, "", 0, 0, 0);
-    }
+
+    render_text(renderer, font, "Enter text (RET to save):", 10, 10, 0);
+    render_text(renderer, font, composition, 10, 50, 1);
 
     SDL_RenderDrawRect(renderer, &input_rect);
 
@@ -110,6 +131,8 @@ void input_level_name(char **level_name)
   TTF_CloseFont(font);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
+
+  strcpy(*level_name, composition);
 }
 
 Screen_State edit_level(SDL_Renderer *renderer, Level *level)
@@ -220,7 +243,11 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
             char level_name[MAX_FILE_PATH_LENGTH] = {0};
             char *level_name_p = (char *)level_name;
             input_level_name(&level_name_p);
-            write_level(level, level_name);
+            printf("level_name: %s\n", level_name);
+            char file_path[MAX_FILE_PATH_LENGTH] = {0};
+            strcat(file_path, "./levels/");
+            strcat(file_path, level_name);
+            write_level(level, file_path);
             return Level_Select;
           }
 
