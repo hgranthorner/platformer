@@ -7,6 +7,7 @@
 #define PLAYER_SIZE       30
 #define TERMINAL_VELOCITY 20
 #define JUMP_VELOCITY     20
+#define MAX_FILE_PATH_LENGTH 200
 
 #define LEVEL_EDITOR "level_editor"
 

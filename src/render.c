@@ -21,7 +21,7 @@ Screen_State play_level(SDL_Renderer *renderer, char *level_name)
                            0, 255, 0, 255, 0);
 
   Level level;
-  char file_path[100];
+  char file_path[MAX_FILE_PATH_LENGTH];
   sprintf(file_path, "levels/%s", level_name);
   load_file(file_path, &level);
   printf("loaded level %s!\n", level_name);
