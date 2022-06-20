@@ -45,12 +45,21 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
     SDL_RenderClear(renderer);
     const int start_frame_time = SDL_GetTicks();
 
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+    if (state[level->player.controls.left])
+      camera.x -= 5;
+
+    if (state[level->player.controls.right])
+      camera.x += 5;
+
     if (SDL_PollEvent(&event))
     {
 
       if (event.type == SDL_MOUSEBUTTONDOWN)
       {
-        SDL_Point p = { .x = event.button.x, .y = event.button.y };
+        SDL_Point p = { .x = event.button.x + camera.x,
+                        .y = event.button.y + camera.y};
         if (SDL_PointInRect(&p, &level->player.rect.shape))
         {
           printf("Clicked on player!\n");
@@ -75,60 +84,74 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
 
       if (event.type == SDL_MOUSEMOTION && event.motion.state & SDL_BUTTON_LMASK)
       {
+        int new_x = event.motion.x + camera.x;
+        int new_y = event.motion.y + camera.y;
         if (player_selected)
         {
-          level->player.rect.shape.x = event.motion.x - PLAYER_SIZE / 2;
-          level->player.rect.shape.y = event.motion.y - PLAYER_SIZE / 2;
+          level->player.rect.shape.x = new_x - PLAYER_SIZE / 2;
+          level->player.rect.shape.y = new_y - PLAYER_SIZE / 2;
         }
 
         if (platform_selected_index != -1)
         {
-          level->rects.rects[platform_selected_index].shape.x = event.motion.x - PLAYER_SIZE / 2;
-          level->rects.rects[platform_selected_index].shape.y = event.motion.y - PLAYER_SIZE / 2;
+          SDL_Rect *r = &level->rects.rects[platform_selected_index].shape;
+          r->x = new_x - r->w / 2;
+          r->y = new_y - r->h / 2;
         }
       }
 
       if (event.type == SDL_KEYDOWN)
       {
-        if (event.key.keysym.scancode == SDL_SCANCODE_L)
+        if (platform_selected_index != -1)
         {
-	  return Level_Select;
-        }
+          SDL_Rect *r = &level->rects.rects[platform_selected_index].shape;
 
-        if (event.key.keysym.scancode == SDL_SCANCODE_S)
-        {
-          write_level(level, "./levels/test.txt");
-	  return Level_Select;
-        }
+          if (event.key.keysym.scancode == SDL_SCANCODE_W)
+            r->h += 10, r->y -= 10;
 
-        if (event.key.keysym.scancode == SDL_SCANCODE_A)
-        {
-          Rect rect = create_rect(100, 200, 100, 100, 0, 255, 0, 255, 0);
-          add_rect(&level->rects, rect);
-        }
+          if (event.key.keysym.scancode == SDL_SCANCODE_A)
+            r->w -= 10;
 
-        if (event.key.keysym.scancode == SDL_SCANCODE_D)
-        {
-          Rect rect = create_rect(100, 200, 100, 100, 255, 0, 0, 255, 1);
-          add_rect(&level->rects, rect);
-        }
+          if (event.key.keysym.scancode == SDL_SCANCODE_S)
+            r->h -= 10;
 
-        if (event.key.keysym.scancode == SDL_SCANCODE_Q)
+          if (event.key.keysym.scancode == SDL_SCANCODE_D)
+            r->w += 10;
+        }
+        else
         {
-	  return Quit;
+          if (event.key.keysym.scancode == SDL_SCANCODE_L)
+            return Level_Select;
+
+          if (event.key.keysym.scancode == SDL_SCANCODE_S)
+          {
+            write_level(level, "./levels/test.txt");
+            return Level_Select;
+          }
+
+          if (event.key.keysym.scancode == SDL_SCANCODE_A)
+          {
+            Rect rect = create_rect(100, 200, 100, 100, 0, 255, 0, 255, 0);
+            add_rect(&level->rects, rect);
+          }
+
+          if (event.key.keysym.scancode == SDL_SCANCODE_D)
+          {
+            Rect rect = create_rect(100, 200, 100, 100, 255, 0, 0, 255, 1);
+            add_rect(&level->rects, rect);
+          }
+
+          if (event.key.keysym.scancode == SDL_SCANCODE_Q)
+            return Quit;
         }
       }
 
       if (event.type == SDL_QUIT)
-      {
         return Quit;
-      }
     }
 
     for (int i = 0; i < level->rects.size; ++i)
-    {
       render_fill_rect(renderer, &camera, &level->rects.rects[i]);
-    }
 
     render_fill_rect(renderer, &camera, &level->player.rect);
 
