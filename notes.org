@@ -97,7 +97,7 @@ Example file:
 ** DONE Parse level from file
 ** DONE Load level from file
 ** DONE Refactor get_line
-** TODO Create level editor
+** DONE Create level editor
 ** TODO Finish level
 ** TODO Handle level transitions
 ** TODO Add vertical camera
