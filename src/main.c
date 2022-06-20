@@ -30,6 +30,7 @@ int main(void)
       if (level_name)
 	load_file(level_name, &level);
       screen = edit_level(renderer, &level);
+      break;
     case Quit:
       printf("Quitting gracefully...\n");
       return 0;

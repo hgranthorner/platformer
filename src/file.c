@@ -185,6 +185,25 @@ void load_file(char *file_path, Level *out_level)
   }
 }
 
+void write_level(Level *level, char *file_path)
+{
+  FILE *file = fopen(file_path, "w");
+
+  fprintf(file, "0 0 0 255\n%d %d\n%d\n",
+          level->player.rect.shape.x, level->player.rect.shape.y, level->rects.size);
+  for (int i = 0; i < level->rects.size; i++)
+  {
+    Rect *r = &level->rects.rects[i];
+    SDL_Rect s = r->shape;
+    Color c = r->color;
+    fprintf(file, "%d %d %d %d %d %d %d %d %d\n",
+            s.x, s.y, s.w, s.h,
+            c.r, c.g, c.b, c.a,
+            r->damaging);
+  }
+
+  fclose(file);
+}
 
 File_Names get_files(char *directory) {
   DIR *d;

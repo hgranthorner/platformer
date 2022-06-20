@@ -1,6 +1,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "editor.h"
+#include "file.h"
 
 void initialize_default_level(Level *level)
 {
@@ -33,6 +34,7 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
   }
 
   int editing = 1;
+  int player_selected = 0;
   const int render_timer = roundf(1000.0f / (float) FPS);
 
   while (editing)
@@ -44,6 +46,49 @@ Screen_State edit_level(SDL_Renderer *renderer, Level *level)
 
     if (SDL_PollEvent(&event))
     {
+
+      if (event.type == SDL_MOUSEBUTTONDOWN)
+      {
+        SDL_Point p = { .x = event.button.x, .y = event.button.y };
+        if (SDL_PointInRect(&p, &level->player.rect.shape))
+        {
+          printf("Clicked on player!\n");
+          player_selected = 1;
+        }
+      }
+
+      if (event.type == SDL_MOUSEBUTTONUP)
+      {
+        player_selected = 0;
+      }
+
+      if (event.type == SDL_MOUSEMOTION && event.motion.state & SDL_BUTTON_LMASK)
+      {
+        if (player_selected)
+        {
+          level->player.rect.shape.x = event.motion.x - PLAYER_SIZE / 2;
+          level->player.rect.shape.y = event.motion.y - PLAYER_SIZE / 2;
+        }
+      }
+
+      if (event.type == SDL_KEYDOWN)
+      {
+        if (event.key.keysym.scancode == SDL_SCANCODE_L)
+        {
+	  return Level_Select;
+        }
+        if (event.key.keysym.scancode == SDL_SCANCODE_S)
+        {
+          write_level(level, "./levels/test.txt");
+	  return Level_Select;
+        }
+
+        if (event.key.keysym.scancode == SDL_SCANCODE_Q)
+        {
+	  return Quit;
+        }
+      }
+
       if (event.type == SDL_QUIT)
       {
         return Quit;

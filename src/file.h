@@ -22,5 +22,6 @@ typedef struct {
 
 void load_file(char *file_path, Level *out_lfr);
 File_Names get_files(char *directory);
+void write_level(Level *level, char *file_path);
 
 #endif

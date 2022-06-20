@@ -1,8 +1,8 @@
 #ifndef consts_h
 #define consts_h
 
-#define WIDTH  1000
-#define HEIGHT 800
+#define WIDTH  800
+#define HEIGHT 640
 #define FPS    60
 #define PLAYER_SIZE       30
 #define TERMINAL_VELOCITY 20
