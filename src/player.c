@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "player.h"
-#include "line.h"
 #include "consts.h"
 
 void apply_gravity(Player *player, const SDL_Rect *camera, const Rects *rects)
@@ -26,7 +25,7 @@ void apply_gravity(Player *player, const SDL_Rect *camera, const Rects *rects)
           player->rect.shape.x = r.x - ps.w;
         else
           player->rect.shape.x = r.x + r.w;
-         
+
         player->x_velocity = 0;
       }
       else
@@ -47,7 +46,7 @@ void apply_gravity(Player *player, const SDL_Rect *camera, const Rects *rects)
   {
     player->y_velocity += player->y_velocity > TERMINAL_VELOCITY
       ? 0
-      : 1;    
+      : 1;
   }
 }
 

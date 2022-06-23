@@ -1,9 +1,14 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdlib.h>
 
 #include "consts.h"
-#include "render.h"
-#include "editor.h"
+#include "file.c"
+#include "rect.c"
+#include "camera.c"
+#include "player.c"
+#include "render.c"
+#include "editor.c"
 
 int main(void)
 {

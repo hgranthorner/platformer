@@ -13,33 +13,6 @@ void initialize_default_level(Level *level)
   level->rects            = rects;
 }
 
-static
-void render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, int x, int y, int is_selected)
-{
-  int w, h;
-  TTF_SizeText(font, text, &w, &h);
-  SDL_Color white = {255, 255, 255,255};
-  SDL_Color black = {0, 0, 0,255};
-  SDL_Surface *surface;
-  if (!is_selected)
-  {
-    surface = TTF_RenderText_Shaded(font, text, white, black);
-  }
-  else
-  {
-    surface = TTF_RenderText_Shaded(font, text, black, white);
-  }
-
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-  SDL_Rect rect = {.x = x, .y = y, .w = w, .h = h};
-  SDL_RenderCopy(renderer, texture, NULL, &rect);
-
-  SDL_FreeSurface(surface);
-  SDL_DestroyTexture(texture);
-}
-
-
 // level_name must be no more than MAX_FILE_PATH_LENGTH in length
 void input_level_name(char **level_name)
 {
