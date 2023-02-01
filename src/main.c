@@ -33,7 +33,7 @@ int main(void)
       // if level_name is assigned, we load the level.
       // otherwise, we leave it null.
       if (level_name)
-	load_file(level_name, &level);
+        load_file(level_name, &level);
       screen = edit_level(renderer, &level);
       break;
     case Quit:

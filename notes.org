@@ -105,4 +105,5 @@ Example file:
 ** TODO Add vertical camera
 
 * Bugs
-** TODO Add collision when hitting platform from the bottom
+** DONE Add collision when hitting platform from the bottom
+CLOSED: [2023-01-31 Tue 23:17]

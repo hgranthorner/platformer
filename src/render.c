@@ -33,7 +33,7 @@ Screen_State play_level(SDL_Renderer *renderer, char *level_name)
   rect_container.rects[rect_container.size - 1] = floor;
 
   const Controls controls = player.controls;
-  int running = 1;
+  size_t running = 1;
   const int render_timer = roundf(1000.0f / (float) FPS);
 
   while (running)
@@ -50,6 +50,7 @@ Screen_State play_level(SDL_Renderer *renderer, char *level_name)
     }
 
     SDL_Event event;
+
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
@@ -75,17 +76,17 @@ Screen_State play_level(SDL_Renderer *renderer, char *level_name)
 
         if (event.key.keysym.scancode == SDL_SCANCODE_L)
         {
-	  return Level_Select;
+          return Level_Select;
         }
 
         if (event.key.keysym.scancode == SDL_SCANCODE_Q)
         {
-	  return Quit;
+          return Quit;
         }
       }
       if (event.type == SDL_QUIT)
       {
-	return Quit;
+        return Quit;
       }
     }
 
@@ -198,16 +199,16 @@ Select_Level_Result select_level(SDL_Renderer *renderer)
 
         if (event.key.keysym.scancode == SDL_SCANCODE_RETURN)
         {
-	  if (selected_index == num_options - 1)
-	  {
-	    result.next_screen = Level_Editor;
-	    result.level_name = NULL;
-	    return result;
-	  }
+          if (selected_index == num_options - 1)
+          {
+            result.next_screen = Level_Editor;
+            result.level_name = NULL;
+            return result;
+          }
 
-	  result.next_screen = In_Level;
-	  result.level_name = files.names[selected_index];
-	  return result;
+          result.next_screen = In_Level;
+          result.level_name = files.names[selected_index];
+          return result;
         }
 
         if (event.key.keysym.scancode == SDL_SCANCODE_Q)
